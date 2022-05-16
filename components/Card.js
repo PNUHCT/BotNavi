@@ -3,8 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import * as Linking from 'expo-linking';
 
 
-
-export default function YouCard({ content, navigation }) {
+export default function YouCard({ content }) {
 
     const link = () => {
         Linking.openURL("https://www.youtube.com/watch?v=" + content.id.videoId)
@@ -21,6 +20,8 @@ export default function YouCard({ content, navigation }) {
         </TouchableOpacity>
     )
 }
+
+//onPress :  {}안에 넣은 function이 실행되게 하는 버튼역할
 
 
 const styles = StyleSheet.create({

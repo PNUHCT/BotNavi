@@ -7,7 +7,7 @@ import { firebase_db } from '../firebaseConfig';
 
 export default function Like() {
 
-    const Example = () => {
+    const Searching = () => {
         const [value, setValue] = useState('');
         <SearchBar
             value={value}

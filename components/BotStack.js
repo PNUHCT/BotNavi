@@ -81,9 +81,9 @@ const TabStackScreen = () => {
     return (
         <TabStack.Navigator screenOptions={{ tabBarActiveTintColor: '#e91e63' }}>
             <TabStack.Screen name="외부" component={YoutubeStackScreen} options={{ tabBarLabel: 'Home', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="home" color={color} size={size} />), }} />
-            <TabStack.Screen name="내부" component={FBStackScreen} options={{ tabBarLabel: 'Updates', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="bell" color={color} size={size} />), }} />
-            <TabStack.Screen name="Like" component={LikeStackScreen} options={{ tabBarLabel: 'Profile', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="account" color={color} size={size} />), }} />
-            <TabStack.Screen name="Test" component={TestScreen} options={{ tabBarLabel: 'Profile', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="Search" color={color} size={size} />), }} />
+            <TabStack.Screen name="내부" component={FBStackScreen} options={{ tabBarLabel: 'Firebase', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="cloud" color={color} size={size} />), }} />
+            <TabStack.Screen name="Like" component={LikeStackScreen} options={{ tabBarLabel: 'Like', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="star" color={color} size={size} />), }} />
+            <TabStack.Screen name="Test" component={TestScreen} options={{ tabBarLabel: 'TestRoom', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="account" color={color} size={size} />), }} />
         </TabStack.Navigator>
     );
 };

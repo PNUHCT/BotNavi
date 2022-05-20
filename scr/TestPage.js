@@ -1,22 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, ScrollView, Text } from "react-native";
+import { StyleSheet, View, ScrollView, Text, SafeAreaView } from "react-native";
 
 
 export default function Test() {
 
     return (
-        <ScrollView style={styles.container}>
-            <Text>Hello</Text>
-        </ScrollView>
+
+        <SafeAreaView style={styles.Maincontainer}>
+            <Text>
+                {`
+                   이곳은 실험실입니다.
+                
+                   나만의 테스트공간
+                
+                   호롤로롤로
+                `}
+            </Text>
+        </SafeAreaView>
+
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    cardContainer: {
-        marginTop: 10
+    Maincontainer: {
+        justifyContent: "center", alignItems: "center", backgroundColor: '#fff', flex: 1
     }
 });

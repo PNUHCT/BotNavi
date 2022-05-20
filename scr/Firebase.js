@@ -43,10 +43,13 @@ export default function Like() {
     }, [])
 
     const SendID = ({ content }) => {
+        console.log(content.id.videoId)
         return (
-            console.log(content.id.videoId)
+            content = content.id.videoId
         )
     }
+
+    // const인데 카드마다 값이 바뀌는 이유?? 단순히 const선언이면, 값이 안바뀌어야 하지 않는가?
 
 
     return (
@@ -64,6 +67,8 @@ export default function Like() {
         </ScrollView>
     );
 }
+// 왜? onPress={() => SendID({ content }) 에서 앞의 ()에는 content가 들어가면 오류가 나지? 뒤의 ()에는 왜 들어가야 하지?
+
 
 const styles = StyleSheet.create({
     container: {

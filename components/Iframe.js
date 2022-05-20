@@ -29,3 +29,5 @@ export default function App() {
         </View>
     );
 }
+
+//videoId를 props를 활용해 할당해보기

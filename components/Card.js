@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import * as Linking from 'expo-linking';
-
+import React from "react";
+import { StyleSheet, Text, View, Image } from "react-native";
 
 export default function YouCard({ content }) {
 
-    const link = () => {
-        Linking.openURL("https://www.youtube.com/watch?v=" + content.id.videoId)
-    }
+    // const link = () => {
+    //     Linking.openURL("https://www.youtube.com/watch?v=" + content.id.videoId)
+    // }
 
     return (
-        <TouchableOpacity style={styles.card} onPress={() => link()}>
+        <View style={styles.card}>
+            {/* <TouchableOpacity style={styles.card} onPress={() => link()}> */}
             <Image style={styles.cardImage} source={{ uri: content.snippet.thumbnails.medium.url }} />
             <View style={styles.cardText}>
                 <Text style={styles.cardTitle} numberOfLines={1}>{content.snippet.title}</Text>
                 <Text style={styles.cardDesc} numberOfLines={3}>{content.snippet.description}</Text>
                 <Text style={styles.cardDate}>{content.snippet.publishedAt}</Text>
             </View>
-        </TouchableOpacity>
+            {/* </TouchableOpacity> */}
+        </View>
     )
 }
 

@@ -4,6 +4,7 @@ import Iframe from '../components/Iframe';
 import Card from '../components/Card';
 import SearchBar from 'react-native-platform-searchbar';
 import { firebase_db } from '../firebaseConfig';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function Like() {
 
@@ -26,6 +27,7 @@ export default function Like() {
     const [state, setState] = useState([])
     const [ready, setReady] = useState(true)
 
+
     useEffect(() => {
         // console.log(route)
         setTimeout(() => {
@@ -40,6 +42,12 @@ export default function Like() {
         }, 1000)
     }, [])
 
+    const SendID = ({ content }) => {
+        return (
+            console.log(content.id.videoId)
+        )
+    }
+
 
     return (
         <ScrollView style={styles.container}>
@@ -49,7 +57,7 @@ export default function Like() {
             <View style={styles.cardContainer}>
                 {
                     state.map((content, i) => {
-                        return (<Card content={content} key={i} />)
+                        return (<TouchableOpacity onPress={() => SendID({ content })}><Card content={content} key={i} /></TouchableOpacity>)
                     })
                 }
             </View>

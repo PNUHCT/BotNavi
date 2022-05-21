@@ -1,70 +1,60 @@
-import React, { useState } from "react";
-import { FlatList, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity } from "react-native";
-import BasicDATA from '../data.json';
+import React, { useState, useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
+import { firebase_db } from '../firebaseConfig';
 
-const DATA = [
-    {
-        id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-        title: "First Item",
-    },
-    {
-        id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-        title: "Second Item",
-    },
-    {
-        id: "58694a0f-3da1-471f-bd96-145571e29d72",
-        title: "Third Item",
-    },
-];
+export default function Users() {
+  const [loading, setLoading] = useState(true); // Set loading to true on component mount
+  const [users, setUsers] = useState([]); // Initial empty array of users
 
-const Item = ({ item, onPress, backgroundColor, textColor }) => (
-    <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
-        <Text style={[styles.title, textColor]}>{item.title}</Text>
-    </TouchableOpacity>
-);
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('Users')
+      .onSnapshot(() => {
+        // see next step
+      });
 
-const App = () => {
-    const [selectedId, setSelectedId] = useState(null);
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
+  }, []);
 
-    const renderItem = ({ item }) => {
-        const backgroundColor = item.id === selectedId ? "#6e3b6e" : "#f9c2ff";
-        const color = item.id === selectedId ? 'white' : 'black';
+  useEffect(() => {
+    const subscriber = firestore()
+      .collection('Users')
+      .onSnapshot(querySnapshot => {
+        const users = [];
+  
+        querySnapshot.forEach(documentSnapshot => {
+          users.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id,
+          });
+        });
+  
+        setUsers(users);
+        setLoading(false);
+      });
+  
+    // Unsubscribe from events when no longer in use
+    return () => subscriber();
+  }, []);
 
-        return (
-            <Item
-                item={item}
-                onPress={() => setSelectedId(item.id)}
-                backgroundColor={{ backgroundColor }}
-                textColor={{ color }}
-            />
-        );
-    };
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <FlatList
-                data={DATA}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id}
-                extraData={selectedId}
-            />
-        </SafeAreaView>
-    );
-};
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginTop: StatusBar.currentHeight || 0,
-    },
-    item: {
-        padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 16,
-    },
-    title: {
-        fontSize: 32,
-    },
-});
 
-export default App;
+  if (loading) {
+    return <ActivityIndicator />;
+  }
+
+  return (
+    <FlatList
+      data={users}
+      renderItem={({ item }) => (
+        <View style={{ height: 50, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text>User ID: {item.id}</Text>
+          <Text>User Name: {item.name}</Text>
+        </View>
+      )}
+    />
+  );
+}

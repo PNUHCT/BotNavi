@@ -67,7 +67,6 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
     FLcontainer: {
-
         borderBottomWidth: 1,
         marginTop: 20
     },

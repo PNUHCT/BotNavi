@@ -42,10 +42,10 @@ export default function Like() {
         }, 1000)
     }, [])
 
-    const SendID = ({ content }) => {
+    const SendID = ({ content } = { getID }) => {
         console.log(content.id.videoId)
         return (
-            content = content.id.videoId
+            { content } = content.id.videoId
         )
     }
 

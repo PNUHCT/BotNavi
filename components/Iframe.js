@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from "react";
 import { Button, View, Alert } from "react-native";
 import YoutubePlayer from "react-native-youtube-iframe";
-import { content } from "../scr/Firebase";
+import { getID } from "../scr/Firebase";
 
 export default function App() {
     const [playing, setPlaying] = useState(false);
@@ -22,7 +22,9 @@ export default function App() {
             <YoutubePlayer
                 height={200}
                 play={playing}
-                videoId={{ content }}
+                videoId={
+                    "pUoOzaU9rw4"
+                }
                 onChangeState={onStateChange}
             />
             <Button title={playing ? "pause" : "play"} onPress={togglePlaying} />

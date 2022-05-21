@@ -1,58 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator } from 'react-native';
-import firestore from '@react-native-firebase/firestore';
+import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet } from 'react-native';
 import { firebase_db } from '../firebaseConfig';
 
 export default function Users() {
   const [loading, setLoading] = useState(true); // Set loading to true on component mount
-  const [users, setUsers] = useState([]); // Initial empty array of users
+  const [state, setState] = useState([])
 
   useEffect(() => {
-    const subscriber = firestore()
-      .collection('Users')
-      .onSnapshot(() => {
-        // see next step
-      });
+    firebase_db.ref('/items').once('value').then((snapshot) => {
+        console.log("파이어베이스에서 데이터 가져왔습니다!!")
+        let items = snapshot.val();
 
-    // Unsubscribe from events when no longer in use
-    return () => subscriber();
-  }, []);
-
-  useEffect(() => {
-    const subscriber = firestore()
-      .collection('Users')
-      .onSnapshot(querySnapshot => {
-        const users = [];
-  
-        querySnapshot.forEach(documentSnapshot => {
-          users.push({
-            ...documentSnapshot.data(),
-            key: documentSnapshot.id,
-          });
-        });
-  
-        setUsers(users);
+        setState(items)
         setLoading(false);
       });
   
     // Unsubscribe from events when no longer in use
-    return () => subscriber();
   }, []);
-
-
 
 
   if (loading) {
     return <ActivityIndicator />;
   }
+//ActivityIndicator는 로딩 중 돌아가는 동그라미
 
   return (
     <FlatList
-      data={users}
+      data={state}
       renderItem={({ item }) => (
         <View style={{ height: 50, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Text>User ID: {item.id}</Text>
-          <Text>User Name: {item.name}</Text>
+            <Text>User ID: {item.snippet.title}</Text>
+            <Text>User Name: {item.snippet.channelId}</Text>
         </View>
       )}
     />

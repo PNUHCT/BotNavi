@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useRef } from "react";
 import { Button, View, Alert } from "react-native";
+import { ListItem } from "react-native-elements";
 import YoutubePlayer from "react-native-youtube-iframe";
-import { playID } from '../scr/Firebase';
+// import FirebaseFL, { item } from "./FirebaseFL"
 
 export default function App() {
     const [playing, setPlaying] = useState(false);
@@ -17,14 +18,14 @@ export default function App() {
         setPlaying((prev) => !prev);
     }, []);
 
-
     return (
         <View>
             <YoutubePlayer
                 height={200}
                 play={playing}
-                videoId={{ playID }
-                    // "pUoOzaU9rw4"
+                videoId={
+                    "pUoOzaU9rw4"
+                    // CardID
                 }
                 onChangeState={onStateChange}
             />

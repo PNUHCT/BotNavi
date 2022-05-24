@@ -3,7 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Youtube from "../scr/Youtube";
-import Firebase from "../scr/Firebase";
+// import Firebase from "../scr/Firebase"; // ScrollView로 된 페이지
+import FireFlat from "../scr/FireFlat";
 import Likepage from "../scr/Flatbase";
 import TestPage from "../scr/TestPage";
 
@@ -39,7 +40,7 @@ const FBStackScreen = () => {
         <FBStack.Navigator>
             <FBStack.Screen
                 name="about"
-                component={Firebase}
+                component={FireFlat}
                 options={{ headerShown: false }}
             />
         </FBStack.Navigator>
@@ -71,6 +72,7 @@ const TestScreen = () => {
         </TestStack.Navigator>
     );
 };
+
 
 
 // 아래쪽 탭을 만들어주는 navigation. 위에서 선언해서 만들어 놓은 stackScreen들을 받아와서 구성한다.

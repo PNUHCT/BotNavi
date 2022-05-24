@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView, Text, SafeAreaView } from "react-native";
-import TestFL from '../components/TestOne';
-import TesTwo from '../components/TestTwo';
+import TestOne from '../components/TestOne';
 
 export default function Test() {
 
     return (
-        // <TestFL />
-        <TesTwo />
+        <TestOne />
         // <SafeAreaView style={styles.Maincontainer}>
         //     <Text>
         //         {`

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView } from "react-native";
-import Iframe from '../components/Iframe';
 import Card from '../components/Card';
 import SearchBar from 'react-native-platform-searchbar';
 import { firebase_db } from '../firebaseConfig';
@@ -56,7 +55,7 @@ export default function Like() {
         <ScrollView style={styles.container}>
             <SearchBar />
             {/* <SearchScreen /> */}
-            <Iframe />
+            {/* <Iframe /> */}
             <View style={styles.cardContainer}>
                 {
                     state.map((content, i) => {

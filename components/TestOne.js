@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, Button, Alert, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TextInput } from 'react-native';
 // import { firebase_db } from '../firebaseConfig';
 // import YoutubePlayer from "react-native-youtube-iframe";
 import filter from 'lodash.filter';

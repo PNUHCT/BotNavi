@@ -7,7 +7,7 @@ import filter from 'lodash.filter';
 
 export default function Users() {
     //-------Flatlist 적용을 위한 useState 등 선언부분-----
-    const [loading, setLoading] = useState(true); // Set loading to true on component mount
+    const [loading, setLoading] = useState(true); // 로딩 화면 mount시키기 위한 useState
     const [state, setState] = useState([])
     const [cardID, setCardID] = useState(["i4S5hvPG9ZY"])
     const [query, setQuery] = useState('');
@@ -53,15 +53,6 @@ export default function Users() {
 
                 setLoading(false);
             })
-            // .then(response => response.json())
-            // .then(response => {
-            //     setData(response.items);
-
-            //     // ADD THIS
-            //     setFullData(response.items);
-
-            //     setLoading(false);
-            // })
             .catch(err => { setLoading(false); setError(err); })
     }, []);
 

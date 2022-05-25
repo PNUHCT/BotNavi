@@ -2,17 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, Button, Alert, TextInput } from 'react-native';
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
-import filter from 'lodash.filter';
-
 
 export default function Users() {
     //-------Flatlist 적용을 위한 useState 등 선언부분-----
     const [loading, setLoading] = useState(true); // 로딩 화면 mount시키기 위한 useState
     const [state, setState] = useState([])
     const [cardID, setCardID] = useState(["i4S5hvPG9ZY"])
-    const [query, setQuery] = useState('');
-    const [fullData, setFullData] = useState([]);
     const [error, setError] = useState(null);
+    const [search, setSearch] = useState('');
+    const [TotalDataSource, setTotalDataSource] = useState([]);
 
 
     // -----iframe 적용부분----------------------------------
@@ -30,7 +28,7 @@ export default function Users() {
     }, []);
 
 
-    // ---------- console.log로 video 확인할 수 있는 함수부분
+    // ---------- CardID에 videoId 할당해주는 부분
     const onPress = ({ item }) => {
         return (
             setCardID(item.id.videoId)
@@ -48,13 +46,49 @@ export default function Users() {
                 console.log("파이어베이스에서 데이터 가져왔습니다!!")
                 let items = snapshot.val()
                 setState(items)
-
-                setFullData(items.snippet);
+                // setFullData(items.snippet);
+                setTotalDataSource(items);
 
                 setLoading(false);
             })
             .catch(err => { setLoading(false); setError(err); })
     }, []);
+
+
+
+    // SearchBar 검색기능 선언부분--------------------------------------------------------
+
+    const searchFilter = (text) => {
+        if (text) {
+            const newData = TotalDataSource.filter(function (item) {
+                const itemData = item.snippet.title
+                    ? item.snippet.title.toUpperCase()
+                    : ''.toUpperCase();
+                const textData = text.toUpperCase();
+                return itemData.indexOf(textData) > -1;
+            });
+            setState(newData);
+            setSearch(text);
+        } else {
+            setState(TotalDataSource);
+            setSearch(text);
+        }
+    };
+
+
+    //FlatList 하이라이트 기능 선언부분 (꼭 필요 x)
+    const ItemSeparatorView = () => {
+        return (
+            // Flat List Item Separator
+            <View
+                style={{
+                    height: 0.5,
+                    width: '100%',
+                    backgroundColor: '#C8C8C8',
+                }}
+            />
+        );
+    };
 
 
     //ActivityIndicator는 로딩 중 돌아가는 동그라미
@@ -79,63 +113,27 @@ export default function Users() {
         );
     }
 
-    // Searchbar를 위한 함수선언단계
 
-    function renderHeader() {
-        return (
-            <View
-                style={{
-                    backgroundColor: '#fff',
-                    padding: 10,
-                    marginVertical: 10,
-                    borderRadius: 20
-                }}
-            >
-                <TextInput
-                    autoCapitalize="none"   // 자동 대문자
-                    // autoCorrect={false}   // 자동수정
-                    // autoComplete  // 자동완성 (Android 한정). 끄려면 off
-                    // clearTextOnFocus={true}  // true일 경우, 텍스트 자동지움됨
-                    // maxLength={1000} // 글자수 제한
-                    clearButtonMode="always"  // 텍스트 보기의 오른쪽에 지우기 버튼 표시됨. 기본값은 never
-                    keyboardType="defualt"
-                    style={{ backgroundColor: '#fff', paddingHorizontal: 20 }}
-                    placeholder="Search"
-                    value={query}
-                    onChangeText={queryText => SearchForQuery(queryText)}
-                />
-            </View>
-        );
-    }
-
-
-    // SaerchBar의 기능을 구현하기 위한 부분
-    const SearchForQuery = text => {
-        const formattedQuery = text.toLowerCase();
-        const filteredData = filter(fullData, user => {
-            return contains(user, formattedQuery);
-        });
-        setState(filteredData);
-        setQuery(text);
-    };
-
-    const contains = ({ title }, query) => {
-        const { first, last } = title;
-
-        if (first.includes(query) || last.includes(query)) {
-            return true;
-        }
-
-        return false;
-    };
-
-
-
-
-
-    // return부분 -----
+    // 렌더링용 메인 return부분 ------------------------------------------------------
     return (
-        <View>
+        <View style={styles.container}>
+
+            {/* SarchBar 부분 */}
+            <TextInput
+                style={styles.textContainer}
+                onChangeText={(text) => searchFilter(text)}
+                value={search}
+                underlineColorAndroid="transparent"
+                placeholder="검색어를 입력하세요!"
+                autoCorrect={true}   // 자동수정
+            // autoCapitalize="none"   // 자동 대문자
+
+            // autoComplete  // 자동완성 (Android 한정). 끄려면 off
+            // clearTextOnFocus={true}  // true일 경우, 텍스트 자동지움됨
+            // maxLength={1000} // 글자수 제한
+            // clearButtonMode="always"  // 텍스트 보기의 오른쪽에 지우기 버튼 표시됨. 기본값은 never
+            // keyboardType="defualt"
+            />
 
             {/* iframe을 보여주기 위한 부분 */}
             <View>
@@ -150,9 +148,10 @@ export default function Users() {
 
 
             {/* Flatlist 부분 */}
-            <FlatList data={state}
-                ListHeaderComponent={renderHeader}
-                keyExtractor={item => item.id}
+            <FlatList
+                data={state}
+                // ItemSeparatorComponent={ItemSeparatorView}
+                keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.cardContainer}>
                         <TouchableOpacity style={styles.card} onPress={() => onPress({ item })}>
@@ -176,7 +175,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     cardContainer: {
-        // marginTop: 10,
         backgroundColor: '#fff',
     },
     card: {
@@ -210,5 +208,11 @@ const styles = StyleSheet.create({
     cardDate: {
         fontSize: 10,
         color: "#A6A6A6",
+    },
+    textContainer: {
+        backgroundColor: '#fff',
+        paddingHorizontal: 20,
+        fontSize: 20,
+        margin: 10,
     }
 });

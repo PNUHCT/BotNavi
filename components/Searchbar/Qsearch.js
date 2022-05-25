@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Text, StyleSheet, View, FlatList } from 'react-native';
-import { SearchBar } from 'react-native-elements';
-import DB from '../../data.json';
+import { SafeAreaView, Text, StyleSheet, View, FlatList, TextInput, } from 'react-native';
 
 const App = () => {
     const [search, setSearch] = useState('');
@@ -9,8 +7,7 @@ const App = () => {
     const [masterDataSource, setMasterDataSource] = useState([]);
 
     useEffect(() => {
-        // fetch("https://jsonplaceholder.typicode.com/posts")
-        fetch(DB)
+        fetch('https://jsonplaceholder.typicode.com/posts')
             .then((response) => response.json())
             .then((responseJson) => {
                 setFilteredDataSource(responseJson);
@@ -25,9 +22,9 @@ const App = () => {
         // Check if searched text is not blank
         if (text) {
             // Inserted text is not blank
-            // Filter the masterDataSource
-            // Update FilteredDataSource
+            // Filter the masterDataSource and update FilteredDataSource
             const newData = masterDataSource.filter(function (item) {
+                // Applying filter for the inserted text in search bar
                 const itemData = item.title
                     ? item.title.toUpperCase()
                     : ''.toUpperCase();
@@ -76,13 +73,12 @@ const App = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
-                <SearchBar
-                    round
-                    searchIcon={{ size: 24 }}
+                <TextInput
+                    style={styles.textInputStyle}
                     onChangeText={(text) => searchFilterFunction(text)}
-                    onClear={(text) => searchFilterFunction('')}
-                    placeholder="Type Here..."
                     value={search}
+                    underlineColorAndroid="transparent"
+                    placeholder="Search Here"
                 />
                 <FlatList
                     data={filteredDataSource}
@@ -101,6 +97,14 @@ const styles = StyleSheet.create({
     },
     itemStyle: {
         padding: 10,
+    },
+    textInputStyle: {
+        height: 40,
+        borderWidth: 1,
+        paddingLeft: 20,
+        margin: 5,
+        borderColor: '#009688',
+        backgroundColor: '#FFFFFF',
     },
 });
 

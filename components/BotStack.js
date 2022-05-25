@@ -7,6 +7,7 @@ import Youtube from "../scr/Youtube";
 import FireFlat from "../scr/FireFlat";
 import Likepage from "../scr/Flatbase";
 import TestPage from "../scr/TestPage";
+import HomePage from "../scr/Flatbase";
 
 // TabStack은 TabBar를 만드는 네비게이션옵션을 선언해준거다.
 // webviewStack은 webview를 StackNavigation해주기 위해 선언해준거다.
@@ -15,6 +16,20 @@ const TabStack = createBottomTabNavigator();
 const webviewStack = createStackNavigator();
 const FBStack = createStackNavigator();
 const TestStack = createStackNavigator();
+
+// 일반 화면을 stackscreen화 시키기 위해 선언하는 곳
+// 마찬가지로 나중에 TabBar에 심을 화면중 하나다.
+const FBStackScreen = () => {
+    return (
+        <FBStack.Navigator>
+            <FBStack.Screen
+                name="about"
+                component={FireFlat}
+                options={{ headerShown: false }}
+            />
+        </FBStack.Navigator>
+    );
+};
 
 // webView화면을 Stackscreen화 시키기 위해 선언하는 곳
 // 나중에 TabBar에 심을 화면중 하나다.
@@ -33,20 +48,22 @@ const YoutubeStackScreen = () => {
     );
 };
 
-// 일반 화면을 stackscreen화 시키기 위해 선언하는 곳
-// 마찬가지로 나중에 TabBar에 심을 화면중 하나다.
-const FBStackScreen = () => {
+
+//HomeTab으로 외부 쿼리 연동할 곳
+const HomeStackScreen = () => {
     return (
         <FBStack.Navigator>
             <FBStack.Screen
                 name="about"
-                component={FireFlat}
+                component={HomePage}
                 options={{ headerShown: false }}
             />
         </FBStack.Navigator>
     );
 };
 
+
+//플레이리스트 찜하기 구현할 곳
 const LikeStackScreen = () => {
     return (
         <FBStack.Navigator>
@@ -82,8 +99,9 @@ const TestScreen = () => {
 const TabStackScreen = () => {
     return (
         <TabStack.Navigator screenOptions={{ tabBarActiveTintColor: '#e91e63' }}>
-            <TabStack.Screen name="웹뷰" component={YoutubeStackScreen} options={{ tabBarLabel: 'Home', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="home" color={color} size={size} />), }} />
             <TabStack.Screen name="자체 데이터베이스" component={FBStackScreen} options={{ tabBarLabel: 'Firebase', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="cloud" color={color} size={size} />), }} />
+            <TabStack.Screen name="웹뷰" component={YoutubeStackScreen} options={{ tabBarLabel: 'Youtube', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="youtube" color={color} size={size} />), }} />
+            <TabStack.Screen name="외부 검색" component={HomeStackScreen} options={{ tabBarLabel: 'Home', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="home" color={color} size={size} />), }} />
             <TabStack.Screen name="좋아요 페이지" component={LikeStackScreen} options={{ tabBarLabel: 'Like', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="star" color={color} size={size} />), }} />
             <TabStack.Screen name="Test 페이지" component={TestScreen} options={{ tabBarLabel: 'TestRoom', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="account" color={color} size={size} />), }} />
         </TabStack.Navigator>

@@ -14,18 +14,18 @@ export default function Users() {
 
 
     // -----iframe 적용부분----------------------------------
-    const [playing, setPlaying] = useState(false);
+    const [playing, setPlaying] = useState(true);
 
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
-            setPlaying(false);
-            Alert.alert("video has finished playing!");
+            setPlaying();
+            // Alert.alert("video has finished playing!");
         }
     }, []);
 
-    const togglePlaying = useCallback(() => {
-        setPlaying((prev) => !prev);
-    }, []);
+    // const togglePlaying = useCallback(() => {
+    //     setPlaying((prev) => !prev);
+    // }, []);
 
 
     // ---------- CardID에 videoId 할당해주는 부분
@@ -142,8 +142,10 @@ export default function Users() {
                     play={playing}
                     videoId={cardID}
                     onChangeState={onStateChange}
+                // fullscreen    // 전체화면?
+                // loop   // 반복재생?
                 />
-                <Button title={playing ? "pause" : "play"} onPress={togglePlaying} />
+                {/* <Button title={playing ? "pause" : "play"} onPress={togglePlaying} /> */}
             </View>
 
 

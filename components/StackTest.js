@@ -3,6 +3,7 @@ import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOp
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
 
+
 export default function Users() {
     //-------Flatlist 적용을 위한 useState 등 선언부분-----
     const [loading, setLoading] = useState(true); // 로딩 화면 mount시키기 위한 useState

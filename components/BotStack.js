@@ -7,7 +7,7 @@ import Youtube from "../scr/Youtube";
 import FireFlat from "../scr/FireFlat";
 import Likepage from "../scr/Flatbase";
 import TestPage from "../scr/TestPage";
-import HomePage from "../scr/Flatbase";
+import HomePage from "../scr/HomeFlat";
 
 // TabStack은 TabBar를 만드는 네비게이션옵션을 선언해준거다.
 // webviewStack은 webview를 StackNavigation해주기 위해 선언해준거다.

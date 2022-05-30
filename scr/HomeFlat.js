@@ -3,11 +3,10 @@ import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOp
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
-
+// import FLCard, { items } from '../components/FLCard';
 
 import Constants from 'expo-constants';
-import { StatusBar } from 'expo-status-bar';
-import { getDatabase, ref, set, child, push, update, remove } from "firebase/database";
+
 
 export default function Users() {
     //-------Flatlist 적용을 위한 useState 등 선언부분-----
@@ -17,7 +16,8 @@ export default function Users() {
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
     const [TotalDataSource, setTotalDataSource] = useState([]);
-    const [favorite, setFavorite] = useState();
+    const [favorite, setFavorite] = useState(false);
+
 
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
@@ -101,7 +101,7 @@ export default function Users() {
     function Like() {
         const user_id = Constants.installationId;
         firebase_db.ref('/like/' + user_id + '/Drum/' + state.idx).set(state)
-        setFavorite(!favorite);
+        setFavorite(true);
     }
 
 
@@ -109,13 +109,8 @@ export default function Users() {
         const user_id = Constants.installationId;
         const data_remove = firebase_db.ref(`/like/${user_id}/Drum/${state.idx}`).remove()
         // .then(() => {Alert.alert('<찜 해제 완료>', '찜 해제가 완료되었습니다', [{ text: '확인' }]); })
-        setFavorite(!favorite);
+        setFavorite(false);
     }
-
-
-
-
-
 
 
 

@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, Button, Alert, TextInput } from 'react-native';
+import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable } from 'react-native';
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
+import { AntDesign } from '@expo/vector-icons';
+
+
+import Constants from 'expo-constants';
 
 export default function Users() {
     //-------Flatlist 적용을 위한 useState 등 선언부분-----
@@ -11,17 +15,22 @@ export default function Users() {
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
     const [TotalDataSource, setTotalDataSource] = useState([]);
+    const [favorite, setFavorite] = useState();
 
 
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
+    // const [next, setNext] = useState(true);
+
 
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
-            setPlaying();
+            setPlaying(false)
+            // setNext(true);
             // Alert.alert("video has finished playing!");
         }
     }, []);
+
 
     // const togglePlaying = useCallback(() => {
     //     setPlaying((prev) => !prev);
@@ -40,14 +49,14 @@ export default function Users() {
     useEffect(() => {
         setLoading(true);
 
-        firebase_db.ref('/items')
+        firebase_db.ref('/TGBSitems')
             .once('value')
             .then((snapshot) => {
-                console.log("파이어베이스에서 데이터 가져왔습니다!!")
-                let items = snapshot.val()
-                setState(items)
+                console.log("TGBS에서 데이터 가져왔습니다!!")
+                let TGBSitems = snapshot.val()
+                setState(TGBSitems)
                 // setFullData(items.snippet);
-                setTotalDataSource(items);
+                setTotalDataSource(TGBSitems);
 
                 setLoading(false);
             })
@@ -90,6 +99,20 @@ export default function Users() {
     //     );
     // };
 
+
+    function Like() {
+        const user_id = Constants.installationId;
+        firebase_db.ref('/like/' + user_id + '/퇴근버스/' + state.idx).set(state)
+        setFavorite(!favorite);
+    }
+
+
+    function UnLike() {
+        const user_id = Constants.installationId;
+        const data_remove = firebase_db.ref(`/like/${user_id}/퇴근버스/${state.idx}`).remove()
+        // .then(() => {Alert.alert('<찜 해제 완료>', '찜 해제가 완료되었습니다', [{ text: '확인' }]); })
+        setFavorite(!favorite);
+    }
 
     //ActivityIndicator는 로딩 중 돌아가는 동그라미
     if (loading) {
@@ -142,9 +165,9 @@ export default function Users() {
                     play={playing}
                     videoId={cardID}
                     onChangeState={onStateChange}
-                // fullscreen    // 전체화면?
-                // loop   // 반복재생?
+                // playList
                 />
+
                 {/* <Button title={playing ? "pause" : "play"} onPress={togglePlaying} /> */}
             </View>
 
@@ -163,6 +186,17 @@ export default function Users() {
                                 <Text style={styles.cardDesc} numberOfLines={3}>{item.snippet.description}</Text>
                                 <Text style={styles.cardDate}>{item.snippet.publishedAt}</Text>
                                 <Text style={styles.cardDate}>{item.id.videoId}</Text>
+                            </View>
+                            <View style={styles.heartBotton}>
+                                {favorite ?
+                                    <Pressable onPress={() => UnLike()}>
+                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
+                                    </Pressable>
+                                    :
+                                    <Pressable onPress={() => Like()}>
+                                        <AntDesign name="hearto" size={30} color="#999" />
+                                    </Pressable>
+                                }
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -189,6 +223,16 @@ const styles = StyleSheet.create({
         borderBottomColor: "#eee",
         paddingBottom: 10
     },
+    // Label: {
+    //     flex: 1,
+    //     //컨텐츠들을 가로로 나열
+    //     //세로로 나열은 column <- 디폴트 값임
+    //     // flexDirection: "row",
+    //     margin: 10,
+    //     borderBottomWidth: 0.5,
+    //     borderBottomColor: "#eee",
+    //     paddingBottom: 10
+    // },
     cardImage: {
         flex: 1,
         width: 100,
@@ -216,5 +260,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         fontSize: 20,
         margin: 10,
+    },
+    heartBotton: {
+        alignItems: "center",
+        justifyContent: "center"
     }
 });

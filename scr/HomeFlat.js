@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, Button, Alert, TextInput } from 'react-native';
+import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable } from 'react-native';
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
+import { AntDesign } from '@expo/vector-icons';
+
+
+import Constants from 'expo-constants';
+import { StatusBar } from 'expo-status-bar';
+import { getDatabase, ref, set, child, push, update, remove } from "firebase/database";
 
 export default function Users() {
     //-------Flatlist 적용을 위한 useState 등 선언부분-----
@@ -11,15 +17,14 @@ export default function Users() {
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
     const [TotalDataSource, setTotalDataSource] = useState([]);
-
+    const [favorite, setFavorite] = useState();
 
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
 
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
-            setPlaying();
-            // Alert.alert("video has finished playing!");
+            setPlaying(true);
         }
     }, []);
 
@@ -40,14 +45,14 @@ export default function Users() {
     useEffect(() => {
         setLoading(true);
 
-        firebase_db.ref('/TGBSitems')
+        firebase_db.ref('/items')
             .once('value')
             .then((snapshot) => {
-                console.log("TGBS에서 데이터 가져왔습니다!!")
-                let TGBSitems = snapshot.val()
-                setState(TGBSitems)
+                console.log("파이어베이스에서 데이터 가져왔습니다!!")
+                let items = snapshot.val()
+                setState(items)
                 // setFullData(items.snippet);
-                setTotalDataSource(TGBSitems);
+                setTotalDataSource(items);
 
                 setLoading(false);
             })
@@ -90,6 +95,29 @@ export default function Users() {
     //     );
     // };
 
+    // Like 관련 설정 코드 ------------------------------------------------
+
+
+    function Like() {
+        const user_id = Constants.installationId;
+        firebase_db.ref('/like/' + user_id + '/Drum/' + state.idx).set(state)
+        setFavorite(!favorite);
+    }
+
+
+    function UnLike() {
+        const user_id = Constants.installationId;
+        const data_remove = firebase_db.ref(`/like/${user_id}/Drum/${state.idx}`).remove()
+        // .then(() => {Alert.alert('<찜 해제 완료>', '찜 해제가 완료되었습니다', [{ text: '확인' }]); })
+        setFavorite(!favorite);
+    }
+
+
+
+
+
+
+
 
     //ActivityIndicator는 로딩 중 돌아가는 동그라미
     if (loading) {
@@ -112,7 +140,6 @@ export default function Users() {
             </View>
         );
     }
-
 
     // 렌더링용 메인 return부분 ------------------------------------------------------
     return (
@@ -142,8 +169,7 @@ export default function Users() {
                     play={playing}
                     videoId={cardID}
                     onChangeState={onStateChange}
-                // fullscreen    // 전체화면?
-                // loop   // 반복재생?
+                    opts={{ playerVars: { autoplay: 1, loop: 1 } }}
                 />
                 {/* <Button title={playing ? "pause" : "play"} onPress={togglePlaying} /> */}
             </View>
@@ -163,6 +189,17 @@ export default function Users() {
                                 <Text style={styles.cardDesc} numberOfLines={3}>{item.snippet.description}</Text>
                                 <Text style={styles.cardDate}>{item.snippet.publishedAt}</Text>
                                 <Text style={styles.cardDate}>{item.id.videoId}</Text>
+                            </View>
+                            <View style={styles.heartBotton}>
+                                {favorite ?
+                                    <Pressable onPress={() => UnLike()}>
+                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
+                                    </Pressable>
+                                    :
+                                    <Pressable onPress={() => Like()}>
+                                        <AntDesign name="hearto" size={30} color="#999" />
+                                    </Pressable>
+                                }
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -216,5 +253,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         fontSize: 20,
         margin: 10,
+    },
+    heartBotton: {
+        alignItems: "center",
+        justifyContent: "center"
     }
 });

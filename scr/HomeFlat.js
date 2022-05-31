@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable } from 'react-native';
+import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert } from 'react-native';
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
@@ -101,6 +101,7 @@ export default function Users() {
     function Like() {
         const user_id = Constants.installationId;
         firebase_db.ref('/like/' + user_id + '/Drum/' + state.idx).set(state)
+            .then(() => { Alert.alert('<찜 완료>'); })
         setFavorite(true);
     }
 
@@ -108,9 +109,22 @@ export default function Users() {
     function UnLike() {
         const user_id = Constants.installationId;
         const data_remove = firebase_db.ref(`/like/${user_id}/Drum/${state.idx}`).remove()
-        // .then(() => {Alert.alert('<찜 해제 완료>', '찜 해제가 완료되었습니다', [{ text: '확인' }]); })
+            .then(() => { Alert.alert('<찜 해제 완료>'); })
         setFavorite(false);
     }
+
+    // function Like() {
+    //     const user_id = Constants.installationId;
+
+    //     if (setFavorite(false)) {
+    //         firebase_db.ref('/like/' + user_id + '/Drum/' + state.idx).set(state)
+    //         setFavorite(true);
+    //     }
+    //     else if (setFavorite(true)) {
+    //         const data_remove = firebase_db.ref(`/like/${user_id}/Drum/${state.idx}`).remove()
+    //         setFavorite(false);
+    //     }
+    // }
 
 
 
@@ -164,7 +178,7 @@ export default function Users() {
                     play={playing}
                     videoId={cardID}
                     onChangeState={onStateChange}
-                    opts={{ playerVars: { autoplay: 1, loop: 1 } }}
+
                 />
                 {/* <Button title={playing ? "pause" : "play"} onPress={togglePlaying} /> */}
             </View>
@@ -185,20 +199,33 @@ export default function Users() {
                                 <Text style={styles.cardDate}>{item.snippet.publishedAt}</Text>
                                 <Text style={styles.cardDate}>{item.id.videoId}</Text>
                             </View>
-                            <View style={styles.heartBotton}>
+                            <View style={styles.LikeButton}>
+                                <View style={styles.heartBotton}>
+                                    <Pressable onPress={() => Like()} >
+                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
+                                    </Pressable>
+                                </View>
+                                <View style={styles.heartBotton}>
+                                    <Pressable onPress={() => UnLike()} >
+                                        <AntDesign name="hearto" size={30} color="#999" />
+                                    </Pressable>
+                                </View>
+                            </View>
+                            {/* <View style={styles.heartBotton}>
                                 {favorite ?
-                                    <Pressable onPress={() => UnLike()}>
+                                    <Pressable onPress={() => UnLike()} >
                                         <AntDesign name="heart" size={30} color="#eb4b4b" />
                                     </Pressable>
                                     :
-                                    <Pressable onPress={() => Like()}>
+                                    <Pressable onPress={() => Like()} >
                                         <AntDesign name="hearto" size={30} color="#999" />
                                     </Pressable>
                                 }
-                            </View>
+                            </View> */}
                         </TouchableOpacity>
-                    </View>
-                )} />
+                    </View >
+                )
+                } />
         </View >
     );
 }
@@ -250,6 +277,11 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     heartBotton: {
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    LikeButton: {
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center"
     }

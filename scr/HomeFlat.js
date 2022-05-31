@@ -4,7 +4,6 @@ import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
 // import FLCard, { items } from '../components/FLCard';
-
 import Constants from 'expo-constants';
 
 
@@ -98,17 +97,17 @@ export default function Users() {
     // Like 관련 설정 코드 ------------------------------------------------
 
 
-    function Like() {
+    function Like({ item }) {
         const user_id = Constants.installationId;
-        firebase_db.ref('/like/' + user_id + '/Drum/' + state.idx).set(state)
+        firebase_db.ref('/like/' + user_id + '/' + item.idx).push(item)
             .then(() => { Alert.alert('<찜 완료>'); })
         setFavorite(true);
     }
 
 
-    function UnLike() {
+    function UnLike({ item }) {
         const user_id = Constants.installationId;
-        const data_remove = firebase_db.ref(`/like/${user_id}/Drum/${state.idx}`).remove()
+        const data_remove = firebase_db.ref(`/like/${user_id}/${item.idx}/`).remove()
             .then(() => { Alert.alert('<찜 해제 완료>'); })
         setFavorite(false);
     }
@@ -201,23 +200,23 @@ export default function Users() {
                             </View>
                             <View style={styles.LikeButton}>
                                 <View style={styles.heartBotton}>
-                                    <Pressable onPress={() => Like()} >
+                                    <Pressable onPress={() => Like({ item })} >
                                         <AntDesign name="heart" size={30} color="#eb4b4b" />
                                     </Pressable>
                                 </View>
                                 <View style={styles.heartBotton}>
-                                    <Pressable onPress={() => UnLike()} >
+                                    <Pressable onPress={() => UnLike({ item })} >
                                         <AntDesign name="hearto" size={30} color="#999" />
                                     </Pressable>
                                 </View>
                             </View>
                             {/* <View style={styles.heartBotton}>
                                 {favorite ?
-                                    <Pressable onPress={() => UnLike()} >
+                                    <Pressable onPress={() => UnLike({ item })} >
                                         <AntDesign name="heart" size={30} color="#eb4b4b" />
                                     </Pressable>
                                     :
-                                    <Pressable onPress={() => Like()} >
+                                    <Pressable onPress={() => Like({ item })} >
                                         <AntDesign name="hearto" size={30} color="#999" />
                                     </Pressable>
                                 }

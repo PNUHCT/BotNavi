@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, ScrollView, Text, SafeAreaView } from "react-native";
+import React, { useState, useEffect, useCallback, Children } from 'react';
+import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert, SafeAreaView } from 'react-native';
 import TestOne from '../components/TestOne';
+import { firebase_db } from '../firebaseConfig';
+import YoutubePlayer from "react-native-youtube-iframe";
+import { AntDesign } from '@expo/vector-icons';
+import Constants from 'expo-constants';
+
 
 export default function Test() {
+
 
     return (
         // <TestOne />
@@ -24,5 +30,6 @@ export default function Test() {
 const styles = StyleSheet.create({
     Maincontainer: {
         justifyContent: "center", alignItems: "center", backgroundColor: '#fff', flex: 1
-    }
+    },
+
 });

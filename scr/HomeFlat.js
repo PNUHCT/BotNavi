@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Children } from 'react';
 import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert } from 'react-native';
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
-// import FLCard, { items } from '../components/FLCard';
 import Constants from 'expo-constants';
+
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { merge } from 'lodash';
 
 
 export default function Users() {
@@ -59,7 +61,6 @@ export default function Users() {
     }, []);
 
 
-
     // SearchBar 검색기능 선언부분--------------------------------------------------------
 
     const searchFilter = (text) => {
@@ -97,9 +98,9 @@ export default function Users() {
     // Like 관련 설정 코드 ------------------------------------------------
 
 
-    function Like({ item }) {
+    function Like({ item, index }) {
         const user_id = Constants.installationId;
-        firebase_db.ref('/like/' + user_id + '/' + item.idx).push(item)
+        firebase_db.ref('/like/' + user_id + index).push(item)
             .then(() => { Alert.alert('<찜 완료>'); })
         setFavorite(true);
     }
@@ -107,10 +108,21 @@ export default function Users() {
 
     function UnLike({ item }) {
         const user_id = Constants.installationId;
-        const data_remove = firebase_db.ref(`/like/${user_id}/${item.idx}/`).remove()
+        const data_remove = firebase_db.ref(`/like/${user_id}` + item.idx)
+            .remove()
             .then(() => { Alert.alert('<찜 해제 완료>'); })
         setFavorite(false);
     }
+
+
+
+    // function UnLike({ item, key }) {
+    //     const user_id = Constants.installationId;
+    //     const data_remove = firebase_db.ref(`/like/${user_id}/${item.idx}/`).remove()
+    //         .then(() => { Alert.alert('<찜 해제 완료>'); })
+    //     setFavorite(false);
+    // }
+    // //리스트 전체삭제
 
     // function Like() {
     //     const user_id = Constants.installationId;

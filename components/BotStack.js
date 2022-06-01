@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Youtube from "../scr/Youtube";
 // import Firebase from "../scr/Firebase"; // ScrollView로 된 페이지
 import FireFlat from "../scr/FireFlat";
-import Likepage from "../scr/Flatbase";
+import Likepage from "../scr/LikePage";
 import TestPage from "../scr/TestPage";
 import HomePage from "../scr/HomeFlat";
 

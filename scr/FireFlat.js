@@ -5,6 +5,7 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
 
 
+
 import Constants from 'expo-constants';
 
 export default function Users() {
@@ -100,18 +101,20 @@ export default function Users() {
     // };
 
 
-    function Like() {
+    function Like({ item, index }) {
         const user_id = Constants.installationId;
-        firebase_db.ref('/like/' + user_id + '/퇴근버스/' + state.idx).set(state)
-        setFavorite(!favorite);
+        firebase_db.ref('/like/' + user_id + index).push(item)
+            .then(() => { Alert.alert('<찜 완료>'); })
+        setFavorite(true);
     }
 
 
-    function UnLike() {
+    function UnLike({ item }) {
         const user_id = Constants.installationId;
-        const data_remove = firebase_db.ref(`/like/${user_id}/퇴근버스/${state.idx}`).remove()
-        // .then(() => {Alert.alert('<찜 해제 완료>', '찜 해제가 완료되었습니다', [{ text: '확인' }]); })
-        setFavorite(!favorite);
+        const data_remove = firebase_db.ref(`/like/${user_id}` + item.idx)
+            .remove()
+            .then(() => { Alert.alert('<찜 해제 완료>'); })
+        setFavorite(false);
     }
 
     //ActivityIndicator는 로딩 중 돌아가는 동그라미
@@ -187,7 +190,19 @@ export default function Users() {
                                 <Text style={styles.cardDate}>{item.snippet.publishedAt}</Text>
                                 <Text style={styles.cardDate}>{item.id.videoId}</Text>
                             </View>
-                            <View style={styles.heartBotton}>
+                            <View style={styles.LikeButton}>
+                                <View style={styles.heartBotton}>
+                                    <Pressable onPress={() => Like({ item })} >
+                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
+                                    </Pressable>
+                                </View>
+                                <View style={styles.heartBotton}>
+                                    <Pressable onPress={() => UnLike({ item })} >
+                                        <AntDesign name="hearto" size={30} color="#999" />
+                                    </Pressable>
+                                </View>
+                            </View>
+                            {/* <View style={styles.heartBotton}>
                                 {favorite ?
                                     <Pressable onPress={() => UnLike()}>
                                         <AntDesign name="heart" size={30} color="#eb4b4b" />
@@ -197,7 +212,7 @@ export default function Users() {
                                         <AntDesign name="hearto" size={30} color="#999" />
                                     </Pressable>
                                 }
-                            </View>
+                            </View> */}
                         </TouchableOpacity>
                     </View>
                 )} />
@@ -262,6 +277,11 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     heartBotton: {
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    LikeButton: {
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center"
     }

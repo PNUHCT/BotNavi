@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert, navigation } from 'react-native';
+import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert } from 'react-native';
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-import HomeFlat from '../scr/HomeFlat';
-
-
 
 
 export default function Users() {
@@ -52,7 +49,7 @@ export default function Users() {
             .then((snapshot) => {
                 let Like_List = Object.values(snapshot.val())
                 console.log(Like_List);
-                if (Like_List === null) { 
+                if (Like_List === null ) { 
                     Alert.alert('<찜 없음>', '목록이 없습니다!')
                 }
                 else { 
@@ -115,7 +112,7 @@ export default function Users() {
 
     function UnLike({ item }) {
         const user_id = Constants.installationId;
-        const data_remove = firebase_db.ref(`/like/${user_id}/${item.idx}`)
+        const data_remove = firebase_db.ref(`/like/${user_id}`)
             .remove()
             .then(() => { Alert.alert('<찜 해제 완료>'); })
         // setFavorite(false);

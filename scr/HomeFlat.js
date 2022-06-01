@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Children } from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert } from 'react-native';
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
@@ -6,7 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { merge } from 'lodash';
+
 
 
 export default function Users() {

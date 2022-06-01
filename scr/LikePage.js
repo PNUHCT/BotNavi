@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback, Children } from 'react';
-import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert, navigation } from 'react-native';
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-import { List } from 'react-native-paper';
+import HomeFlat from '../scr/HomeFlat';
+
 
 
 
@@ -45,28 +46,25 @@ export default function Users() {
     useEffect(() => {
         setLoading(true);
 
-        const user_id = Constants.installationId;
-
         firebase_db
-            .ref("/like/")
+            .ref(`/like`)
             .once('child_added')
             .then((snapshot) => {
-                let Likeitem = snapshot
-                    .val()
-                // .getValue(Object)
+                let Like_List = Object.values(snapshot.val())
+                console.log(Like_List);
+                if (Like_List === null) { 
+                    Alert.alert('<찜 없음>', '목록이 없습니다!')
+                }
+                else { 
+                    setState(Like_List)
+                    setTotalDataSource(Like_List);
+                    setLoading(false);
+                }
+                console.log(Like_List.length);
+                console.log(loading);
 
-
-                setState(Likeitem)
-                setTotalDataSource(Likeitem);
-                setLoading(false);
-                console.log(Likeitem)
-            })
-
-            // if (items_list.length > 0) {
-            //     setState(items_list);
-            // }
-
-            .catch(err => { setLoading(false); setError(err); });
+            }, 1000)
+            .catch(err => { setLoading(false); setError(err); }, 1000);
     }, []);
 
 
@@ -117,7 +115,7 @@ export default function Users() {
 
     function UnLike({ item }) {
         const user_id = Constants.installationId;
-        const data_remove = firebase_db.ref(`/like/${user_id}`)
+        const data_remove = firebase_db.ref(`/like/${user_id}/${item.idx}`)
             .remove()
             .then(() => { Alert.alert('<찜 해제 완료>'); })
         // setFavorite(false);

@@ -10,7 +10,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@expo/vector-icons": "13.0.0",
+    "@expo/vector-icons": "^13.0.0",
     "@freakycoder/react-native-bounceable": "0.2.5",
     "@react-native-community/masked-view": "0.1.11",
     "@react-native-firebase/app": "14.9.3",
@@ -46,7 +46,7 @@
     "react-native-firebase": "5.6.0",
     "react-native-gesture-handler": "~2.2.1",
     "react-native-loading-spinner-overlay": "3.0.0",
-    "react-native-paper": "4.12.1",
+    "react-native-paper": "^4.12.1",
     "react-native-platform-searchbar": "1.2.3",
     "react-native-reanimated": "~2.8.0",
     "react-native-safe-area-context": "4.2.4",

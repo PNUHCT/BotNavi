@@ -4,6 +4,8 @@ import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
+import { values } from 'lodash';
+
 
 
 export default function Users() {
@@ -37,32 +39,52 @@ export default function Users() {
             setCardID(item.id.videoId)
         )
     }
-
+    const user_id = Constants.installationId;
 
     // ---Firebase를 대입하기 위한 부분 --------
     useEffect(() => {
         setLoading(true);
 
+        // 캐시 자동 지우기
+        // 풀 다운 업데이트
+        // 제거 링크 지정
         firebase_db
             .ref(`/like`)
-            .once('child_added')
-            .then((snapshot) => {
-                let Like_List = Object.values(snapshot.val())
-                console.log(Like_List);
-                if (Like_List === null ) { 
+            .on('child_added', snapshot => {
+                const Like_List = Object.values(snapshot.val())
+                console.log(Like_List)
+                if (Like_List === null) {
                     Alert.alert('<찜 없음>', '목록이 없습니다!')
+                    setLoading(false);
+                    return (<View><Text>Blank</Text></View>)
                 }
-                else { 
+                else {
                     setState(Like_List)
                     setTotalDataSource(Like_List);
                     setLoading(false);
                 }
-                console.log(Like_List.length);
-                console.log(loading);
 
-            }, 1000)
-            .catch(err => { setLoading(false); setError(err); }, 1000);
+                console.log(Like_List.length);
+            })
     }, []);
+    // .once('child_added')
+    // .then((snapshot) => {
+    //     let Like_List = Object.values(snapshot.val())
+    //     console.log(Like_List);
+    //     if (Like_List === null) {
+    //         Alert.alert('<찜 없음>', '목록이 없습니다!')
+    //     }
+    //     else {
+    //         setState(Like_List)
+    //         setTotalDataSource(Like_List);
+    //         setLoading(false);
+    //     }
+    //     console.log(Like_List.length);
+    //     console.log(loading);
+
+    // }, 1000)
+    // .catch(err => { setLoading(false); setError(err); }, 1000);
+
 
 
     // SearchBar 검색기능 선언부분--------------------------------------------------------
@@ -115,9 +137,9 @@ export default function Users() {
         const data_remove = firebase_db.ref(`/like/${user_id}`)
             .remove()
             .then(() => { Alert.alert('<찜 해제 완료>'); })
+        console.log(data_remove)
         // setFavorite(false);
     }
-
 
 
     // function UnLike({ item, key }) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert } from 'react-native';
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
@@ -104,7 +104,7 @@ export default function Users() {
             .then(() => { Alert.alert('<찜 완료>'); })
         setFavorite(true);
     }
-
+    // 저장할 떄 인덱스 키값 넣기 
 
     function UnLike({ item }) {
         const user_id = Constants.installationId;

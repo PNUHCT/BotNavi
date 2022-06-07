@@ -98,12 +98,12 @@ const TestScreen = () => {
 // MaterialCommunityIcons name으로 원하는 아이콘 설정해주자.
 const TabStackScreen = () => {
     return (
-        <TabStack.Navigator screenOptions={{ tabBarActiveTintColor: '#e91e63' }}>
-            <TabStack.Screen name="자체 데이터베이스" component={FBStackScreen} options={{ tabBarLabel: 'Firebase', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="cloud" color={color} size={size} />), }} />
+        <TabStack.Navigator screenOptions={{ tabBarActiveTintColor: '#e91e63' }} backBehavior="history" initialRouteName="홈">
+            <TabStack.Screen name="파이어베이스" component={FBStackScreen} options={{ tabBarLabel: 'Firebase', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="cloud" color={color} size={size} />), }} />
             <TabStack.Screen name="웹뷰" component={YoutubeStackScreen} options={{ tabBarLabel: 'Youtube', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="youtube" color={color} size={size} />), }} />
-            <TabStack.Screen name="외부 검색" component={HomeStackScreen} options={{ tabBarLabel: 'Home', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="home" color={color} size={size} />), }} />
-            <TabStack.Screen name="좋아요 페이지" component={LikeStackScreen} options={{ tabBarLabel: 'Like', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="star" color={color} size={size} />), }} />
-            <TabStack.Screen name="Test 페이지" component={TestScreen} options={{ tabBarLabel: 'TestRoom', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="account" color={color} size={size} />), }} />
+            <TabStack.Screen name="홈" component={HomeStackScreen} options={{ tabBarLabel: 'Home', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="home" color={color} size={size} />), }} />
+            <TabStack.Screen name="찜 페이지" component={LikeStackScreen} options={{ tabBarLabel: 'Like', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="star" color={color} size={size} />), }} />
+            <TabStack.Screen name="테스트 페이지" component={TestScreen} options={{ tabBarLabel: 'TestRoom', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="account" color={color} size={size} />), }} />
         </TabStack.Navigator>
     );
 };

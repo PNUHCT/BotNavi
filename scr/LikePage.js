@@ -4,7 +4,6 @@ import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-import { values } from 'lodash';
 
 
 
@@ -39,54 +38,61 @@ export default function Users() {
             setCardID(item.id.videoId)
         )
     }
-    const user_id = Constants.installationId;
+
 
     // ---Firebase를 대입하기 위한 부분 --------
     useEffect(() => {
-        setLoading(true);
-
-        // 캐시 자동 지우기
-        // 풀 다운 업데이트
-        // 제거 링크 지정
+        console.log("파이어베이스")
         firebase_db
-            .ref(`/like`)
+            .ref(`/like/`)
             .on('child_added', snapshot => {
                 const Like_List = Object.values(snapshot.val())
-                console.log(Like_List)
                 if (Like_List === null) {
                     Alert.alert('<찜 없음>', '목록이 없습니다!')
                     setLoading(false);
-                    return (<View><Text>Blank</Text></View>)
                 }
                 else {
                     setState(Like_List)
                     setTotalDataSource(Like_List);
                     setLoading(false);
+                    console.log(Like_List.length);
+                    console.log(Like_List);
                 }
-
-                console.log(Like_List.length);
             })
+
+
     }, []);
-    // .once('child_added')
-    // .then((snapshot) => {
-    //     let Like_List = Object.values(snapshot.val())
-    //     console.log(Like_List);
-    //     if (Like_List === null) {
-    //         Alert.alert('<찜 없음>', '목록이 없습니다!')
-    //     }
-    //     else {
-    //         setState(Like_List)
-    //         setTotalDataSource(Like_List);
-    //         setLoading(false);
-    //     }
-    //     console.log(Like_List.length);
-    //     console.log(loading);
+    //     firebase_db
+    //         .ref(`/like`)
+    //         .once('child_added')
+    //         .then((snapshot) => {
+    //             let Like_List = Object.values(snapshot.val())
+    //             console.log(Like_List);
+    //             if (Like_List === null) {
+    //                 Alert.alert('<찜 없음>', '목록이 없습니다!')
+    //             }
+    //             else {
+    //                 setState(Like_List)
+    //                 setTotalDataSource(Like_List);
+    //                 setLoading(false);
+    //             }
+    //             console.log(Like_List.length);
+    //             console.log(loading);
 
-    // }, 1000)
-    // .catch(err => { setLoading(false); setError(err); }, 1000);
+    //         }, 1000)
+    //         .catch(err => { setLoading(false); setError(err); }, 1000);
+    // }, []);
 
 
+    // Pull Down Refreshing 기능 부분 ---------------------------------------------------
+    const onRefresh = async () => {
+        setIsFetching(true);
+        await sleep(2000);
+        setIsFetching(false);
+    };
 
+    const [isFetching, setIsFetching] = useState(false);
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     // SearchBar 검색기능 선언부분--------------------------------------------------------
 
     const searchFilter = (text) => {
@@ -224,6 +230,8 @@ export default function Users() {
             {/* Flatlist 부분 */}
             <FlatList
                 data={state}
+                onRefresh={onRefresh}
+                refreshing={isFetching}
                 // ItemSeparatorComponent={ItemSeparatorView}
                 keyExtractor={(item, index) => index.toString()} //<= 여기 값을 조정??
                 renderItem={({ item }) => (

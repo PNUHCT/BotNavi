@@ -102,7 +102,7 @@ export default function Users() {
         const user_id = Constants.installationId;
         firebase_db.ref('/like/' + user_id + index).push(item)
             .then(() => { Alert.alert('<찜 완료>'); })
-        setFavorite(true);
+        // setFavorite(true);
     }
     // 저장할 떄 인덱스 키값 넣기 
 
@@ -111,7 +111,7 @@ export default function Users() {
         const data_remove = firebase_db.ref(`/like/${user_id}` + item.idx)
             .remove()
             .then(() => { Alert.alert('<찜 해제 완료>'); })
-        setFavorite(false);
+        // setFavorite(false);
     }
 
 

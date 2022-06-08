@@ -23,8 +23,15 @@ export default function Users() {
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
 
+    function Next ({item}) {
+        if (playing == false) {
+            item.idx == (item.idx + 1);
+        }
+    }
+
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
+            <Next/>
             setPlaying(true);
         }
     }, []);
@@ -52,7 +59,6 @@ export default function Users() {
                 console.log("파이어베이스에서 데이터 가져왔습니다!!")
                 let items = snapshot.val()
                 setState(items)
-                // setFullData(items.snippet);
                 setTotalDataSource(items);
 
                 setLoading(false);
@@ -102,14 +108,14 @@ export default function Users() {
         // const user_id = Constants.installationId;
         firebase_db.ref('/like/').push(item)
             .then(() => { Alert.alert('<찜 완료>'); })
-        // setFavorite(true);
+        setFavorite(true);
     }
     // 저장할 떄 인덱스 키값 넣기 
 
     function UnLike({ item }) {
         firebase_db.ref(`/like/`).remove()
             .then(() => { Alert.alert('<찜 해제 완료>'); })
-        // setFavorite(false);
+        setFavorite(false);
     }
 
 
@@ -187,9 +193,15 @@ export default function Users() {
                     play={playing}
                     videoId={cardID}
                     onChangeState={onStateChange}
-
+                    opts={{
+                        playerVars: {
+                          autoplay: 1, //자동재생 O
+                          rel: 0, //관련 동영상 표시하지 않음 (근데 별로 쓸모 없는듯..)
+                          modestbranding: 1 // 컨트롤 바에 youtube 로고를 표시하지 않음
+                        }
+                    }}
                 />
-                {/* <Button title={playing ? "pause" : "play"} onPress={togglePlaying} /> */}
+                {/* <Button title={playing ? "pause" : "pzzlay"} onPress={togglePlaying} /> */}
             </View>
 
 

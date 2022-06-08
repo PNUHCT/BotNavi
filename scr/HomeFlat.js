@@ -99,17 +99,15 @@ export default function Users() {
 
 
     function Like({ item, index }) {
-        const user_id = Constants.installationId;
-        firebase_db.ref('/like/' + user_id + index).push(item)
+        // const user_id = Constants.installationId;
+        firebase_db.ref('/like/').push(item)
             .then(() => { Alert.alert('<찜 완료>'); })
         // setFavorite(true);
     }
     // 저장할 떄 인덱스 키값 넣기 
 
     function UnLike({ item }) {
-        const user_id = Constants.installationId;
-        const data_remove = firebase_db.ref(`/like/${user_id}` + item.idx)
-            .remove()
+        firebase_db.ref(`/like/`).remove()
             .then(() => { Alert.alert('<찜 해제 완료>'); })
         // setFavorite(false);
     }

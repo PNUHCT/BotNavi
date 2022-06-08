@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert } from 'react-native';
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
@@ -14,7 +14,7 @@ export default function Users() {
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
     const [TotalDataSource, setTotalDataSource] = useState([]);
-    const [favorite, setFavorite] = useState();
+    const [favorite, setFavorite] = useState(false);
 
 
     // -----iframe 적용부분----------------------------------
@@ -99,21 +99,35 @@ export default function Users() {
     // };
 
 
-    function Like({ item, index }) {
-        const user_id = Constants.installationId;
-        firebase_db.ref('/like/' + user_id + index).push(item)
+    function Like({ item }) {
+        // const user_id = Constants.installationId;
+        const data_push = firebase_db.ref('/like').push(item)
             .then(() => { Alert.alert('<찜 완료>'); })
         setFavorite(true);
     }
 
-
     function UnLike({ item }) {
-        const user_id = Constants.installationId;
-        const data_remove = firebase_db.ref(`/like/${user_id}` + item.idx)
-            .remove()
+        const LikeData = firebase_db.ref(`/like`)
+        const itemKey = Object.keys(LikeData);
+        firebase_db.ref(`/like/${itemKey}`).remove()
             .then(() => { Alert.alert('<찜 해제 완료>'); })
         setFavorite(false);
     }
+
+    // function Like({ item }) {
+    //     if (favorite === true) {
+    //         const newPostRef = firebase_db.ref('/like').push(item)
+    //             .then(() => { Alert.alert('<찜 완료>'); })
+    //         setFavorite(true)
+    //         const postId = newPostRef.key;
+    //     } else {
+    //         firebase_db.ref(`/like/`+ poseId)
+    //             .remove()
+    //             .then(() => { Alert.alert('<찜 해제 완료>'); })
+    //         setFavorite(false);
+    //     }
+
+    // }
 
     //ActivityIndicator는 로딩 중 돌아가는 동그라미
     if (loading) {
@@ -177,7 +191,7 @@ export default function Users() {
             <FlatList
                 data={state}
                 // ItemSeparatorComponent={ItemSeparatorView}
-                keyExtractor={(item, index) => index.toString()}
+                keyExtractor={(index) => index.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.cardContainer}>
                         <TouchableOpacity style={styles.card} onPress={() => onPress({ item })}>
@@ -201,15 +215,13 @@ export default function Users() {
                                 </View>
                             </View>
                             {/* <View style={styles.heartBotton}>
-                                {favorite ?
-                                    <Pressable onPress={() => UnLike()}>
+                                <Pressable onPress={() => Like({ item })}>
+                                    {favorite ?
                                         <AntDesign name="heart" size={30} color="#eb4b4b" />
-                                    </Pressable>
-                                    :
-                                    <Pressable onPress={() => Like()}>
+                                        :
                                         <AntDesign name="hearto" size={30} color="#999" />
-                                    </Pressable>
-                                }
+                                    }
+                                </Pressable>
                             </View> */}
                         </TouchableOpacity>
                     </View>

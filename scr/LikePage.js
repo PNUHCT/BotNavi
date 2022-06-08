@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert } from 'react-native';
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-
+import Blank from '../data.json'
 
 
 export default function Users() {
@@ -15,9 +15,7 @@ export default function Users() {
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
     const [TotalDataSource, setTotalDataSource] = useState([]);
-    // const [favorite, setFavorite] = useState(false);
-    const [Likey, setLikey]= useState();
-
+    const [favorite, setFavorite] = useState(false);
 
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
@@ -43,73 +41,27 @@ export default function Users() {
 
     // ---Firebase를 대입하기 위한 부분 --------
 
-    useEffect(() => {setTimeout(()=>{
-        firebase_db
-            .ref(`/like`)
-            .on('child_added', snapshot => {
-                Object.values(snapshot.val())
-                const Like_List = Object.values(snapshot.val())
-<<<<<<< Updated upstream
-
-=======
-                console.log(Like_List.length);
-                console.log(Like_List);
->>>>>>> Stashed changes
-                if (Like_List === null) {
-                    Alert.alert('<찜 없음>', '목록이 없습니다!')
-                    setLoading(false);
-                }
-                else {
-                    setState(Like_List)
-                    setTotalDataSource(Like_List);
-                    setLoading(false);
-<<<<<<< Updated upstream
-                    console.log(Like_List);
-=======
-
->>>>>>> Stashed changes
-                }
-            })
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(true);
+            const DB = firebase_db.ref(`/like/`).on('value', snapshot => (snapshot.val()));
+            if (DB === null) {
+                Alert.alert('<찜 없음>', '목록이 없습니다!')
+                console.log("비어있음!!")
+            } else {
+                firebase_db
+                    .ref(`/like/`)
+                    .on('value', (snapshot) => {
+                        const Like_List = Object.values(snapshot.val());
+                        setState(Like_List)
+                        setTotalDataSource(Like_List);
+                        setLoading(false);
+                        console.log(Like_List);
+                        console.log(Like_List.length);
+                    })
+            }
         }, 300)
     }, []);
-
-    // useEffect(() => {
-    //     const user_id = Constants.installationId;
-    //     console.log("파이어베이스")
-    //     firebase_db
-    //         .ref(`/like/` + user_id)
-    //         .on('child_added')
-    //         .then((snapshot) => {
-    //             const Like_List = Object.values(snapshot.val())
-    //                 setState(Like_List)
-    //                 setTotalDataSource(Like_List);
-    //                 setLoading(false);
-    //                 console.log(Like_List.length);
-    //                 console.log(Like_List);
-    //             })
-    // }, []);
-
-    //     firebase_db
-    //         .ref(`/like`)
-    //         .once('child_added')
-    //         .then((snapshot) => {
-    //             let Like_List = Object.values(snapshot.val())
-    //             console.log(Like_List);
-    //             if (Like_List === null) {
-    //                 Alert.alert('<찜 없음>', '목록이 없습니다!')
-    //             }
-    //             else {
-    //                 setState(Like_List)
-    //                 setTotalDataSource(Like_List);
-    //                 setLoading(false);
-    //             }
-    //             console.log(Like_List.length);
-    //             console.log(loading);
-
-    //         }, 1000)
-    //         .catch(err => { setLoading(false); setError(err); }, 1000);
-    // }, []);
-
 
     // Pull Down Refreshing 기능 부분 ---------------------------------------------------
     const onRefresh = async () => {
@@ -159,45 +111,18 @@ export default function Users() {
 
 
     function Like({ item }) {
-        const user_id = Constants.installationId;
-        firebase_db.ref('/like/' + user_id).push(item)
-            .then(() => { Alert.alert('<찜 완료>'); })
-        // setFavorite(true);
+        // const user_id = Constants.installationId;
+        // firebase_db.ref('/like/' + user_id).push(item)
+        //     .then(() => { Alert.alert('<찜 완료>'); })
+        setFavorite(true);
     }
 
 
     function UnLike({ item }) {
-        const user_id = Constants.installationId;
-        const data_remove = firebase_db.ref(`/like/${user_id}`)
-            .remove()
-            .then(() => { Alert.alert('<찜 해제 완료>'); })
-        console.log(data_remove)
-        // setFavorite(false);
+        // const data_remove = firebase_db.ref(`/like/${item.idx}/`).remove()
+        //     .then(() => { Alert.alert('<찜 해제 완료>'); })
+        setFavorite(false);
     }
-
-
-    // function UnLike({ item, key }) {
-    //     const user_id = Constants.installationId;
-    //     const data_remove = firebase_db.ref(`/like/${user_id}/${item.idx}/`).remove()
-    //         .then(() => { Alert.alert('<찜 해제 완료>'); })
-    //     setFavorite(false);
-    // }
-    // //리스트 전체삭제
-
-    // function Like() {
-    //     const user_id = Constants.installationId;
-
-    //     if (setFavorite(false)) {
-    //         firebase_db.ref('/like/' + user_id + '/Drum/' + state.idx).set(state)
-    //         setFavorite(true);
-    //     }
-    //     else if (setFavorite(true)) {
-    //         const data_remove = firebase_db.ref(`/like/${user_id}/Drum/${state.idx}`).remove()
-    //         setFavorite(false);
-    //     }
-    // }
-
-
 
     //ActivityIndicator는 로딩 중 돌아가는 동그라미
     if (loading) {
@@ -274,36 +199,37 @@ export default function Users() {
                             </View>
                             <View style={styles.LikeButton}>
 
+                                <View style={styles.heartBotton}>
+                                    {favorite ?
+                                        <Pressable onPress={() => UnLike({ item })} >
+                                            <AntDesign name="hearto" size={30} color="#999" />
+                                        </Pressable>
+                                        :
+                                        <Pressable onPress={() => Like({ item })} >
+                                            <AntDesign name="heart" size={30} color="#eb4b4b" />
+                                        </Pressable>
+                                    }
+                                </View>
+
                                 {/* <View style={styles.heartBotton}>
                                     <Pressable onPress={() => Like({ item })} >
-                                        {favorite? 
                                         <AntDesign name="heart" size={30} color="#eb4b4b" />
-                                        :
-                                        <AntDesign name="hearto" size={30} color="#999" />}
+                                    </Pressable>
+                                </View>
+                                <View style={styles.heartBotton}>
+                                    <Pressable onPress={() => UnLike({ item })} >
+                                        <AntDesign name="hearto" size={30} color="#999" />
                                     </Pressable>
                                 </View> */}
-
-                                <View style={styles.heartBotton}>
-                                    <Pressable onPress={() => Like({ item })} >
-                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
-                                    </Pressable>
-                                </View>
-                                <View style={styles.heartBotton}>
-                                    <Pressable onPress={() => UnLike({ item })} >
-                                        <AntDesign name="hearto" size={30} color="#999" />
-                                    </Pressable>
-                                </View>
                             </View>
                             {/* <View style={styles.heartBotton}>
-                                {favorite ?
-                                    <Pressable onPress={() => UnLike({ item })} >
+                                <Pressable onPress={() => Like({ item })}>
+                                    {favorite ?
                                         <AntDesign name="heart" size={30} color="#eb4b4b" />
-                                    </Pressable>
-                                    :
-                                    <Pressable onPress={() => Like({ item })} >
+                                        :
                                         <AntDesign name="hearto" size={30} color="#999" />
-                                    </Pressable>
-                                }
+                                    }
+                                </Pressable>
                             </View> */}
                         </TouchableOpacity>
                     </View >

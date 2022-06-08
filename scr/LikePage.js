@@ -49,7 +49,12 @@ export default function Users() {
             .on('child_added', snapshot => {
                 Object.values(snapshot.val())
                 const Like_List = Object.values(snapshot.val())
+<<<<<<< Updated upstream
 
+=======
+                console.log(Like_List.length);
+                console.log(Like_List);
+>>>>>>> Stashed changes
                 if (Like_List === null) {
                     Alert.alert('<찜 없음>', '목록이 없습니다!')
                     setLoading(false);
@@ -58,7 +63,11 @@ export default function Users() {
                     setState(Like_List)
                     setTotalDataSource(Like_List);
                     setLoading(false);
+<<<<<<< Updated upstream
                     console.log(Like_List);
+=======
+
+>>>>>>> Stashed changes
                 }
             })
         }, 300)

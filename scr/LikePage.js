@@ -20,11 +20,13 @@ export default function Users() {
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
 
+
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
             setPlaying(true);
         }
     }, []);
+
 
     // const togglePlaying = useCallback(() => {
     //     setPlaying((prev) => !prev);

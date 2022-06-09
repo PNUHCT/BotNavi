@@ -19,30 +19,22 @@ export default function Users() {
 
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
-    // const [next, setNext] = useState(true);
-
-
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
-            setPlaying(false)
-            // setNext(true);
-            // Alert.alert("video has finished playing!");
+            setPlaying(true)
         }
     }, []);
-
-
     // const togglePlaying = useCallback(() => {
     //     setPlaying((prev) => !prev);
     // }, []);
 
-
     // ---------- CardID에 videoId 할당해주는 부분
-    const onPress = ({ item }) => {
+    const onPress = ({ item, index }) => {
+        console.log({ index })
         return (
             setCardID(item.id.videoId)
         )
     }
-
 
     // ---Firebase를 대입하기 위한 부분 --------
     useEffect(() => {
@@ -54,9 +46,7 @@ export default function Users() {
                 console.log("TGBS에서 데이터 가져왔습니다!!")
                 let TGBSitems = snapshot.val()
                 setState(TGBSitems)
-                // setFullData(items.snippet);
                 setTotalDataSource(TGBSitems);
-
                 setLoading(false);
             })
             .catch(err => { setLoading(false); setError(err); })
@@ -83,22 +73,6 @@ export default function Users() {
         }
     };
 
-
-    //FlatList 하이라이트 기능 선언부분 (꼭 필요 x)
-    // const ItemSeparatorView = () => {
-    //     return (
-    //         // Flat List Item Separator
-    //         <View
-    //             style={{
-    //                 height: 0.5,
-    //                 width: '100%',
-    //                 backgroundColor: '#C8C8C8',
-    //             }}
-    //         />
-    //     );
-    // };
-
-
     function Like({ item }) {
         // const user_id = Constants.installationId;
         const data_push = firebase_db.ref('/like').push(item)
@@ -114,20 +88,6 @@ export default function Users() {
         setFavorite(false);
     }
 
-    // function Like({ item }) {
-    //     if (favorite === true) {
-    //         const newPostRef = firebase_db.ref('/like').push(item)
-    //             .then(() => { Alert.alert('<찜 완료>'); })
-    //         setFavorite(true)
-    //         const postId = newPostRef.key;
-    //     } else {
-    //         firebase_db.ref(`/like/`+ poseId)
-    //             .remove()
-    //             .then(() => { Alert.alert('<찜 해제 완료>'); })
-    //         setFavorite(false);
-    //     }
-
-    // }
 
     //ActivityIndicator는 로딩 중 돌아가는 동그라미
     if (loading) {
@@ -163,14 +123,7 @@ export default function Users() {
                 value={search}
                 underlineColorAndroid="transparent"
                 placeholder="검색어를 입력하세요!"
-                autoCorrect={true}   // 자동수정
-            // autoCapitalize="none"   // 자동 대문자
-
-            // autoComplete  // 자동완성 (Android 한정). 끄려면 off
-            // clearTextOnFocus={true}  // true일 경우, 텍스트 자동지움됨
-            // maxLength={1000} // 글자수 제한
-            // clearButtonMode="always"  // 텍스트 보기의 오른쪽에 지우기 버튼 표시됨. 기본값은 never
-            // keyboardType="defualt"
+                autoCorrect={true}
             />
 
             {/* iframe을 보여주기 위한 부분 */}
@@ -180,9 +133,7 @@ export default function Users() {
                     play={playing}
                     videoId={cardID}
                     onChangeState={onStateChange}
-                // playList
                 />
-
                 {/* <Button title={playing ? "pause" : "play"} onPress={togglePlaying} /> */}
             </View>
 
@@ -190,17 +141,17 @@ export default function Users() {
             {/* Flatlist 부분 */}
             <FlatList
                 data={state}
-                // ItemSeparatorComponent={ItemSeparatorView}
                 keyExtractor={(index) => index.toString()}
-                renderItem={({ item }) => (
+                renderItem={({ item, index }) => (
                     <View style={styles.cardContainer}>
-                        <TouchableOpacity style={styles.card} onPress={() => onPress({ item })}>
+                        <TouchableOpacity style={styles.card} onPress={() => onPress({ item, index })}>
                             <Image style={styles.cardImage} source={{ uri: item.snippet.thumbnails.medium.url }} />
                             <View style={styles.cardText}>
                                 <Text style={styles.cardTitle} numberOfLines={1}>{item.snippet.title}</Text>
                                 <Text style={styles.cardDesc} numberOfLines={3}>{item.snippet.description}</Text>
                                 <Text style={styles.cardDate}>{item.snippet.publishedAt}</Text>
                                 <Text style={styles.cardDate}>{item.id.videoId}</Text>
+                                <Text style={styles.cardDate}>{index}</Text>
                             </View>
                             <View style={styles.LikeButton}>
                                 <View style={styles.heartBotton}>
@@ -248,16 +199,6 @@ const styles = StyleSheet.create({
         borderBottomColor: "#eee",
         paddingBottom: 10
     },
-    // Label: {
-    //     flex: 1,
-    //     //컨텐츠들을 가로로 나열
-    //     //세로로 나열은 column <- 디폴트 값임
-    //     // flexDirection: "row",
-    //     margin: 10,
-    //     borderBottomWidth: 0.5,
-    //     borderBottomColor: "#eee",
-    //     paddingBottom: 10
-    // },
     cardImage: {
         flex: 1,
         width: 100,

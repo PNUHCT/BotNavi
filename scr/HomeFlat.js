@@ -23,16 +23,12 @@ export default function Users() {
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
 
-    function Next ({item}) {
-        if (playing == false) {
-            item.idx == (item.idx + 1);
-        }
-    }
-
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
-            <Next/>
+            item.i == (item.i + 1)
+            console.log(item.idx)
             setPlaying(true);
+            return( {item} )
         }
     }, []);
 
@@ -203,6 +199,7 @@ export default function Users() {
                 />
                 {/* <Button title={playing ? "pause" : "pzzlay"} onPress={togglePlaying} /> */}
             </View>
+
 
 
             {/* Flatlist 부분 */}

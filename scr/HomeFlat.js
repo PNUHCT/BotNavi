@@ -28,7 +28,7 @@ export default function Users() {
             item.i == (item.i + 1)
             console.log(item.idx)
             setPlaying(true);
-            return( {item} )
+            return ({ item })
         }
     }, []);
 
@@ -99,10 +99,9 @@ export default function Users() {
 
     // Like 관련 설정 코드 ------------------------------------------------
 
-
     function Like({ item, index }) {
-        // const user_id = Constants.installationId;
-        firebase_db.ref('/like/').push(item)
+        const user_id = Constants.installationId;
+        firebase_db.ref(`/like/${user_id}`).push(item)
             .then(() => { Alert.alert('<찜 완료>'); })
         setFavorite(true);
     }
@@ -191,9 +190,9 @@ export default function Users() {
                     onChangeState={onStateChange}
                     opts={{
                         playerVars: {
-                          autoplay: 1, //자동재생 O
-                          rel: 0, //관련 동영상 표시하지 않음 (근데 별로 쓸모 없는듯..)
-                          modestbranding: 1 // 컨트롤 바에 youtube 로고를 표시하지 않음
+                            autoplay: 1, //자동재생 O
+                            rel: 0, //관련 동영상 표시하지 않음 (근데 별로 쓸모 없는듯..)
+                            modestbranding: 1 // 컨트롤 바에 youtube 로고를 표시하지 않음
                         }
                     }}
                 />

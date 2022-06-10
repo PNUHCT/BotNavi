@@ -7,7 +7,7 @@ import Constants from 'expo-constants';
 import Blank from '../data.json'
 
 
-export default function Users() {
+export default function Users(navigation) {
     //-------Flatlist 적용을 위한 useState 등 선언부분-----
     const [loading, setLoading] = useState(true); // 로딩 화면 mount시키기 위한 useState
     const [state, setState] = useState([])
@@ -46,22 +46,21 @@ export default function Users() {
     useEffect(() => {
         setTimeout(() => {
             setLoading(true);
-            const DB = firebase_db.ref(`/like/`).on('value', snapshot => (snapshot.val()));
-            if (DB === null) {
-                Alert.alert('<찜 없음>', '목록이 없습니다!')
-                console.log("비어있음!!")
-            } else {
-                firebase_db
-                    .ref(`/like/`)
-                    .on('value', (snapshot) => {
-                        const Like_List = Object.values(snapshot.val());
-                        setState(Like_List)
-                        setTotalDataSource(Like_List);
+            const user_id = Constants.installationId;
+            firebase_db
+                .ref(`/like/${user_id}`)
+                .on('value', (snapshot) => {
+                    const Like_List = (snapshot.val());
+                    if (Like_List === null) {
+                        Alert.alert('<찜 없음>', '목록이 없습니다!', [{ text: '확인' }])
+                    } else {
+                        setState(Object.values(Like_List))
+                        setTotalDataSource(Object.values(Like_List));
                         setLoading(false);
-                        console.log(Like_List);
-                        console.log(Like_List.length);
-                    })
-            }
+                        // console.log(Object.values(Like_List));
+                        // console.log(Object.values(Like_List.length));
+                    }
+                })
         }, 300)
     }, []);
 

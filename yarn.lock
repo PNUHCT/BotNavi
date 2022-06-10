@@ -2603,6 +2603,11 @@ axios@0.27.2:
     follow-redirects "^1.14.9"
     form-data "^4.0.0"
 
+axios@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.7.0.tgz#489c269044d5066dfa2c64c749cb131b176f4a7a"
+  integrity sha512-5X9Fbhy/McI95kWcapRjYA9Kg1wpYgLSniWKCdiIXvm94dcHD967lRaUfyG8EsOrF5SvSeYqdWoXbON0Sr1MPA==
+
 babel-core@^7.0.0-bridge.0:
   version "7.0.0-bridge.0"
   resolved "https://registry.npmjs.org/babel-core/-/babel-core-7.0.0-bridge.0.tgz"
@@ -8072,6 +8077,13 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+youtube-api-search@0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/youtube-api-search/-/youtube-api-search-0.0.5.tgz#9dd686de762ff2504a90288c57fce5a370643002"
+  integrity sha1-ndaG3nYv8lBKkCiMV/zlo3BkMAI=
+  dependencies:
+    axios "^0.7.0"
 
 youtube-player@5.5.2:
   version "5.5.2"

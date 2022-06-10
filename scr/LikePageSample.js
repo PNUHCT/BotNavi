@@ -22,7 +22,7 @@ export default function LikePage({ navigation, route }) {
                 let items = snapshot.val();
                 console.log(items); //데이터가 null인지 확인
                 if (items === null) {
-                    Alert.alert('<찜 없음>', '목록이 없습니다!', [{ text: '확인', onPress: () => { navigation.navigate('HomeFlat') } }])
+                    Alert.alert('<찜 없음>', '목록이 없습니다!', [{ text: '확인', onPress: () => { navigation.navigate('HomeStackScreen') } }])
                 }
                 else { //데이터가 있으면, setTip해서 데이터를 보여준다.  (숙제 1)
                     setState(Object.values(items))

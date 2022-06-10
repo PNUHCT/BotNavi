@@ -19,9 +19,10 @@ export default function Users() {
 
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
+
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
-            setPlaying(true)
+            setPlaying(true);
         }
     }, []);
     // const togglePlaying = useCallback(() => {
@@ -30,7 +31,7 @@ export default function Users() {
 
     // ---------- CardID에 videoId 할당해주는 부분
     const onPress = ({ item, index }) => {
-        console.log({ index })
+        console.log(1);
         return (
             setCardID(item.id.videoId)
         )
@@ -74,8 +75,8 @@ export default function Users() {
     };
 
     function Like({ item }) {
-        // const user_id = Constants.installationId;
-        const data_push = firebase_db.ref('/like').push(item)
+        const user_id = Constants.installationId;
+        const data_push = firebase_db.ref(`/like/${user_id}`).push(item)
             .then(() => { Alert.alert('<찜 완료>'); })
         setFavorite(true);
     }
@@ -132,7 +133,19 @@ export default function Users() {
                     height={200}
                     play={playing}
                     videoId={cardID}
+                    // playList={[비디오아이디리스트] 또는 playlist코드}
+                    // playListStartIndex={인덱스 넘버}
                     onChangeState={onStateChange}
+                    forceAndroidAutoplay={true}
+                    playerVars={{
+                        background: 1,
+                        frameborder: 0,
+                        autoplay: 1,
+                        mute: 1
+                    }}
+                    InitialPlayerParams={{
+                        loop: true
+                    }}
                 />
                 {/* <Button title={playing ? "pause" : "play"} onPress={togglePlaying} /> */}
             </View>

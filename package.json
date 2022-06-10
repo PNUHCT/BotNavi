@@ -59,7 +59,8 @@
     "react-native-youtube": "2.0.2",
     "react-native-youtube-iframe": "2.2.2",
     "react-redux": "8.0.1",
-    "react-youtube": "9.0.1"
+    "react-youtube": "9.0.1",
+    "youtube-api-search": "0.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

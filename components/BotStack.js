@@ -98,7 +98,7 @@ const TestScreen = () => {
 // MaterialCommunityIcons name으로 원하는 아이콘 설정해주자.
 const TabStackScreen = () => {
     return (
-        <TabStack.Navigator screenOptions={{ tabBarActiveTintColor: '#e91e63' }} backBehavior="history" initialRouteName="홈">
+        <TabStack.Navigator screenOptions={{ tabBarActiveTintColor: '#e91e63', headerShown: false }} backBehavior="history" initialRouteName="홈" sceneContainerStyle={{ marginTop: 30 }}>
             <TabStack.Screen name="파이어베이스" component={FBStackScreen} options={{ tabBarLabel: 'Firebase', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="cloud" color={color} size={size} />), }} />
             <TabStack.Screen name="웹뷰" component={YoutubeStackScreen} options={{ tabBarLabel: 'Youtube', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="youtube" color={color} size={size} />), }} />
             <TabStack.Screen name="홈" component={HomeStackScreen} options={{ tabBarLabel: 'Home', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="home" color={color} size={size} />), }} />

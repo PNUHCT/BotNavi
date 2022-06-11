@@ -201,6 +201,7 @@ export default function Users(navigation) {
                             <View style={styles.LikeButton}>
 
                                 <View style={styles.heartBotton}>
+                                    {/* favorite 대신에 cardID가 있는지 유무 확인 */}
                                     {favorite ?
                                         <Pressable onPress={() => UnLike({ item })} >
                                             <AntDesign name="hearto" size={30} color="#999" />

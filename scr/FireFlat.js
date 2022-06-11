@@ -15,13 +15,14 @@ export default function Users() {
     const [search, setSearch] = useState('');
     const [TotalDataSource, setTotalDataSource] = useState([]);
     const [favorite, setFavorite] = useState(false);
-
+    const [test, setTest] = useState(true);
 
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
 
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
+            setTest(false)
             setPlaying(true);
         }
     }, []);
@@ -30,8 +31,7 @@ export default function Users() {
     // }, []);
 
     // ---------- CardID에 videoId 할당해주는 부분
-    const onPress = ({ item, index }) => {
-        console.log(1);
+    const onPress = ({ item }) => {
         return (
             setCardID(item.id.videoId)
         )
@@ -49,6 +49,8 @@ export default function Users() {
                 setState(TGBSitems)
                 setTotalDataSource(TGBSitems);
                 setLoading(false);
+                console.log(Object.keys(TGBSitems)[4])
+
             })
             .catch(err => { setLoading(false); setError(err); })
     }, []);
@@ -154,7 +156,7 @@ export default function Users() {
             {/* Flatlist 부분 */}
             <FlatList
                 data={state}
-                keyExtractor={(index) => index.toString()}
+                // keyExtractor={(index) => index.toString()}
                 renderItem={({ item, index }) => (
                     <View style={styles.cardContainer}>
                         <TouchableOpacity style={styles.card} onPress={() => onPress({ item, index })}>
@@ -164,7 +166,7 @@ export default function Users() {
                                 <Text style={styles.cardDesc} numberOfLines={3}>{item.snippet.description}</Text>
                                 <Text style={styles.cardDate}>{item.snippet.publishedAt}</Text>
                                 <Text style={styles.cardDate}>{item.id.videoId}</Text>
-                                <Text style={styles.cardDate}>{index}</Text>
+                                <Text style={styles.cardDate}>{(typeof index)}</Text>
                             </View>
                             <View style={styles.LikeButton}>
                                 <View style={styles.heartBotton}>

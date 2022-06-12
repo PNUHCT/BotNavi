@@ -35,7 +35,6 @@ export default function Users(navigation) {
 
     // ---------- CardID에 videoId 할당해주는 부분
     const onPress = ({ item }) => {
-        console.log(itme.index)
         return (
             setCardID(item.id.videoId)
         )
@@ -53,7 +52,7 @@ export default function Users(navigation) {
                 .on('value', (snapshot) => {
                     const Like_List = (snapshot.val());
                     if (Like_List === null) {
-                        Alert.alert('<찜 없음>', '목록이 없습니다!', [{ text: '확인' }])
+                        Alert.alert('<찜 없음>', '목록이 없습니다!')
                     } else {
                         setState(Object.values(Like_List))
                         setTotalDataSource(Object.values(Like_List));
@@ -111,18 +110,11 @@ export default function Users(navigation) {
 
     // Like 관련 설정 코드 ------------------------------------------------
 
-
-    function Like({ item }) {
-        // const user_id = Constants.installationId;
-        // firebase_db.ref('/like/' + user_id).push(item)
-        //     .then(() => { Alert.alert('<찜 완료>'); })
-        setFavorite(true);
-    }
-
-
     function UnLike({ item }) {
-        // const data_remove = firebase_db.ref(`/like/${item.idx}/`).remove()
-        //     .then(() => { Alert.alert('<찜 해제 완료>'); })
+
+        const user_id = Constants.installationId;
+        const data_remove = firebase_db.ref(`/like/${user_id}/`).remove()
+            .then(() => { Alert.alert('<찜 해제 완료>'); })
         setFavorite(false);
     }
 
@@ -213,7 +205,7 @@ export default function Users(navigation) {
                                             <AntDesign name="hearto" size={30} color="#999" />
                                         </Pressable>
                                         :
-                                        <Pressable onPress={() => Like({ item })} >
+                                        <Pressable onPress={() => UnLike({ item })} >
                                             <AntDesign name="heart" size={30} color="#eb4b4b" />
                                         </Pressable>
                                     }

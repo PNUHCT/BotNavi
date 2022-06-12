@@ -35,6 +35,7 @@ export default function Users(navigation) {
 
     // ---------- CardID에 videoId 할당해주는 부분
     const onPress = ({ item }) => {
+        console.log(itme.index)
         return (
             setCardID(item.id.videoId)
         )
@@ -146,6 +147,11 @@ export default function Users(navigation) {
             </View>
         );
     }
+
+    // const Favorite = ({ item }) => {
+    //     if (item.id.videoId == undefined) { <Like /> }
+    //     else { <UnLike /> }
+    // }
 
     // 렌더링용 메인 return부분 ------------------------------------------------------
     return (

@@ -5,30 +5,43 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-
-
-
 export default function Users() {
     //-------Flatlist 적용을 위한 useState 등 선언부분-----
     const [loading, setLoading] = useState(true); // 로딩 화면 mount시키기 위한 useState
     const [state, setState] = useState([])
     const [cardID, setCardID] = useState(["i4S5hvPG9ZY"])
+    //  HAlbn3WHw6Q 사쿠란보
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
     const [TotalDataSource, setTotalDataSource] = useState([]);
     const [favorite, setFavorite] = useState(false);
 
 
+
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
+    // HAlbn3WHw6Q
+    const test = ({ item, index }) => {
+        // if (playing = false) {
+        // index = index+1
+        // console.log(index)
+        // console.log(Object.keys(item)[0])
+        return (
+            "HAlbn3WHw6Q"
+
+            // testID
+        )
+        // }
+    }
 
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
-            item.i == (item.i + 1)
-            console.log(item.idx)
+            setCardID(test);
             setPlaying(true);
-            return ({ item })
+            //외부 function은 안먹힘
+            //console.log는 먹힘
+            //즉, 내부에서 선언하는 것은 먹힌다는 소리
+            //useState는 먹힘
         }
     }, []);
 
@@ -36,9 +49,11 @@ export default function Users() {
     //     setPlaying((prev) => !prev);
     // }, []);
 
-
     // ---------- CardID에 videoId 할당해주는 부분
-    const onPress = ({ item }) => {
+    const onPress = ({ item, index }) => {
+        // console.log(item.snippet.publishedAt)
+        // console.log(Object.keys(item)[0])
+        console.log(Object.values(index)[0])
         return (
             setCardID(item.id.videoId)
         )
@@ -47,21 +62,21 @@ export default function Users() {
 
     // ---Firebase를 대입하기 위한 부분 --------
     useEffect(() => {
-        setLoading(true);
-
-        firebase_db.ref('/items')
-            .once('value')
-            .then((snapshot) => {
-                console.log("파이어베이스에서 데이터 가져왔습니다!!")
-                let items = snapshot.val()
-                setState(items)
-                setTotalDataSource(items);
-
-                setLoading(false);
-            })
-            .catch(err => { setLoading(false); setError(err); })
+        setTimeout(() => {
+            setLoading(true);
+            firebase_db
+                .ref('/items')
+                .on('value', (snapshot) => {
+                    console.log("items에서 데이터 가져왔습니다!!")
+                    const items = (snapshot.val());
+                    setState(items)
+                    setTotalDataSource(items);
+                    setLoading(false);
+                    // console.log(Object.keys(items))
+                    // console.log(Object.values(items)[3])
+                })
+        }, 300)
     }, []);
-
 
     // SearchBar 검색기능 선언부분--------------------------------------------------------
 
@@ -104,6 +119,7 @@ export default function Users() {
         firebase_db.ref(`/like/${user_id}`).push(item)
             .then(() => { Alert.alert('<찜 완료>'); })
         setFavorite(true);
+        console.log(index)
     }
     // 저장할 떄 인덱스 키값 넣기 
 
@@ -188,13 +204,7 @@ export default function Users() {
                     play={playing}
                     videoId={cardID}
                     onChangeState={onStateChange}
-                    opts={{
-                        playerVars: {
-                            autoplay: 1, //자동재생 O
-                            rel: 0, //관련 동영상 표시하지 않음 (근데 별로 쓸모 없는듯..)
-                            modestbranding: 1 // 컨트롤 바에 youtube 로고를 표시하지 않음
-                        }
-                    }}
+                // cueVideoById={'HAlbn3WHw6Q'}
                 />
                 {/* <Button title={playing ? "pause" : "pzzlay"} onPress={togglePlaying} /> */}
             </View>
@@ -205,20 +215,21 @@ export default function Users() {
             <FlatList
                 data={state}
                 // ItemSeparatorComponent={ItemSeparatorView}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
+                keyExtractor={(item, index) => index}
+                renderItem={({ item, index }) => (
                     <View style={styles.cardContainer}>
-                        <TouchableOpacity style={styles.card} onPress={() => onPress({ item })}>
+                        <TouchableOpacity style={styles.card} onPress={() => onPress({ item, index })}>
                             <Image style={styles.cardImage} source={{ uri: item.snippet.thumbnails.medium.url }} />
                             <View style={styles.cardText}>
                                 <Text style={styles.cardTitle} numberOfLines={1}>{item.snippet.title}</Text>
                                 <Text style={styles.cardDesc} numberOfLines={3}>{item.snippet.description}</Text>
                                 <Text style={styles.cardDate}>{item.snippet.publishedAt}</Text>
                                 <Text style={styles.cardDate}>{item.id.videoId}</Text>
+                                <Text style={styles.cardDate} >{test(index = { index, item })}</Text>
                             </View>
                             <View style={styles.LikeButton}>
                                 <View style={styles.heartBotton}>
-                                    <Pressable onPress={() => Like({ item })} >
+                                    <Pressable onPress={() => Like({ item, index })} >
                                         <AntDesign name="heart" size={30} color="#eb4b4b" />
                                     </Pressable>
                                 </View>

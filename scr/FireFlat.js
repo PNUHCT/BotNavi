@@ -38,23 +38,39 @@ export default function Users() {
     }
 
     // ---Firebase를 대입하기 위한 부분 --------
+    // useEffect(() => {
+    //     setLoading(true);
+
+    //     firebase_db.ref('/TGBSitems')
+    //         .once('value')
+    //         .then((snapshot) => {
+    //             console.log("TGBS에서 데이터 가져왔습니다!!")
+    //             let TGBSitems = snapshot.val()
+    //             setState(TGBSitems)
+    //             setTotalDataSource(TGBSitems);
+    //             setLoading(false);
+    //             console.log(Object.keys(TGBSitems)[4])
+
+    //         })
+    //         .catch(err => { setLoading(false); setError(err); })
+    // }, []);
+
+
     useEffect(() => {
-        setLoading(true);
-
-        firebase_db.ref('/TGBSitems')
-            .once('value')
-            .then((snapshot) => {
-                console.log("TGBS에서 데이터 가져왔습니다!!")
-                let TGBSitems = snapshot.val()
-                setState(TGBSitems)
-                setTotalDataSource(TGBSitems);
-                setLoading(false);
-                console.log(Object.keys(TGBSitems)[4])
-
-            })
-            .catch(err => { setLoading(false); setError(err); })
+        setTimeout(() => {
+            setLoading(true);
+            firebase_db
+                .ref('/TGBSitems')
+                .on('value', (snapshot) => {
+                    console.log("TGBS에서 데이터 가져왔습니다!!")
+                    const TGBSitems = (snapshot.val());
+                    setState(TGBSitems)
+                    setTotalDataSource(TGBSitems);
+                    setLoading(false);
+                    console.log(Object.keys(TGBSitems)[4])
+                })
+        }, 300)
     }, []);
-
 
 
     // SearchBar 검색기능 선언부분--------------------------------------------------------
@@ -83,13 +99,13 @@ export default function Users() {
         setFavorite(true);
     }
 
-    function UnLike({ item }) {
-        const LikeData = firebase_db.ref(`/like`)
-        const itemKey = Object.keys(LikeData);
-        firebase_db.ref(`/like/${itemKey}`).remove()
-            .then(() => { Alert.alert('<찜 해제 완료>'); })
-        setFavorite(false);
-    }
+    // function UnLike({ item }) {
+    //     const LikeData = firebase_db.ref(`/like`)
+    //     const itemKey = Object.keys(LikeData);
+    //     firebase_db.ref(`/like/${itemKey}`).remove()
+    //         .then(() => { Alert.alert('<찜 해제 완료>'); })
+    //     setFavorite(false);
+    // }
 
 
     //ActivityIndicator는 로딩 중 돌아가는 동그라미
@@ -112,6 +128,13 @@ export default function Users() {
                 </Text>
             </View>
         );
+    }
+
+    //찜하기 함수 테스트중
+
+    const Favorite = ({ item }) => {
+        if (item.id.videoId == undefined) { <Like /> }
+        else { <UnLike /> }
     }
 
 
@@ -166,7 +189,7 @@ export default function Users() {
                                 <Text style={styles.cardDesc} numberOfLines={3}>{item.snippet.description}</Text>
                                 <Text style={styles.cardDate}>{item.snippet.publishedAt}</Text>
                                 <Text style={styles.cardDate}>{item.id.videoId}</Text>
-                                <Text style={styles.cardDate}>{(typeof index)}</Text>
+                                <Text style={styles.cardDate}>{index}</Text>
                             </View>
                             <View style={styles.LikeButton}>
                                 <View style={styles.heartBotton}>

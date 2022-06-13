@@ -21,29 +21,33 @@ export default function Users() {
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
     // HAlbn3WHw6Q
-    const test = ({ item, index }) => {
-        // if (playing = false) {
-        // index = index+1
-        // console.log(index)
-        // console.log(Object.keys(item)[0])
-        return (
-            "HAlbn3WHw6Q"
-
-            // testID
-        )
-        // }
-    }
-
-    const onStateChange = useCallback((state) => {
+    const onStateChange = (state) => {
         if (state === "ended") {
-            setCardID(test);
-            setPlaying(true);
+            setCardID("HAlbn3WHw6Q");
+            // ended가 되면=>cardID에 test가 들어감=>test는 videoId가 되어야 함
+            // cardID에 들어갈 공식: (선택한 item의 index + 1) = index, Object.keys(index)가 임의의 키값이 나온다면,
+            // 그에 대한 .id.videoId
+            // cardID가 바뀐 후 다시 playing이 true가 되어, 연속재생됨.
+            setPlaying(true);  // <=이거 false로 바꾸면 터치시 바로재생이 안됨.
             //외부 function은 안먹힘
             //console.log는 먹힘
             //즉, 내부에서 선언하는 것은 먹힌다는 소리
             //useState는 먹힘
+            return (state)
         }
-    }, []);
+    };
+
+
+    const test = ({ item, state }) => {
+        // 현재 끝난 item값의 다음 index에 해당하는 videoI로 바뀌도록 반복함수 만들기
+        // for(시작조건;끝나는 조건;반복 조건) 사용하기?
+        const itemID = Object.keys(item)
+        if (onStateChange(state) === 'ended') {
+            console.log(itemID) // flatlist에서 test라는 함수를 통해 index = {item}으로 받아올 경우, 선택한 카드의 json데이터 받아옴
+            // 만약 index = { index }올 받아올 경우엔 index번호로 받아옴
+            // return (testID)
+        }
+    }
 
     // const togglePlaying = useCallback(() => {
     //     setPlaying((prev) => !prev);
@@ -113,6 +117,7 @@ export default function Users() {
     // };
 
     // Like 관련 설정 코드 ------------------------------------------------
+
 
     function Like({ item, index }) {
         const user_id = Constants.installationId;
@@ -225,7 +230,7 @@ export default function Users() {
                                 <Text style={styles.cardDesc} numberOfLines={3}>{item.snippet.description}</Text>
                                 <Text style={styles.cardDate}>{item.snippet.publishedAt}</Text>
                                 <Text style={styles.cardDate}>{item.id.videoId}</Text>
-                                <Text style={styles.cardDate} >{test(index = { index, item })}</Text>
+                                <Text style={styles.cardDate} >{test(index = { item })}</Text>
                             </View>
                             <View style={styles.LikeButton}>
                                 <View style={styles.heartBotton}>

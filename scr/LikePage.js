@@ -110,11 +110,27 @@ export default function Users(navigation) {
 
     // Like 관련 설정 코드 ------------------------------------------------
 
-    function UnLike({ item }) {
+    // function Select({ item }) {
+    //     if (item.etag == )
+    // }
 
+    function UnLike({ item, index }) {
         const user_id = Constants.installationId;
-        const data_remove = firebase_db.ref(`/like/${user_id}/`).remove()
-            .then(() => { Alert.alert('<찜 해제 완료>'); })
+        let FBKey = firebase_db.ref(`/like/${user_id}`).on('value', (snapshot) => {
+            const keys = (snapshot.val());
+            let itemkeys = Object.keys(keys);
+            console.log(itemkeys) //임의의 키 모두 찍힘 => item을 적용해서 하나만 선택하는 경로 찾기
+        })
+
+        // console.log(item.etag)
+        // if (FBKey == Object.keys(item)) {
+        //     FBKey = firebase_db.ref(`/like/${user_id}`).on('value', (snapshot) => {
+        //         const keys = (snapshot.val());
+        //         let itemkeys = Object.keys(keys);
+        //         console.log(itemkeys)
+        //     }).remove()
+        // }
+        // .then(() => { Alert.alert('<찜 해제 완료>'); }, console.log(removing))
         setFavorite(false);
     }
 
@@ -201,7 +217,7 @@ export default function Users(navigation) {
                                 <View style={styles.heartBotton}>
                                     {/* favorite 대신에 cardID가 있는지 유무 확인 */}
                                     {favorite ?
-                                        <Pressable onPress={() => UnLike({ item })} >
+                                        <Pressable onPress={() => Like({ item })} >
                                             <AntDesign name="hearto" size={30} color="#999" />
                                         </Pressable>
                                         :

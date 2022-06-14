@@ -44,7 +44,6 @@ export default function Users() {
     useEffect(() => {
         setTimeout(() => {
             setLoading(true);
-            const user_id = Constants.installationId;
             firebase_db
                 .ref(`/like/${user_id}`)
                 .on('value', (snapshot) => {

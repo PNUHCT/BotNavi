@@ -10,12 +10,12 @@ export default function Users() {
     const [loading, setLoading] = useState(true); // 로딩 화면 mount시키기 위한 useState
     const [state, setState] = useState([])
     const [cardID, setCardID] = useState(["i4S5hvPG9ZY"])
-    //  HAlbn3WHw6Q 사쿠란보
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
     const [TotalDataSource, setTotalDataSource] = useState([]);
     const [favorite, setFavorite] = useState(false);
-
+    const user_id = Constants.installationId;
+    //  HAlbn3WHw6Q 사쿠란보
 
 
     // -----iframe 적용부분----------------------------------
@@ -76,8 +76,6 @@ export default function Users() {
                     setState(items)
                     setTotalDataSource(items);
                     setLoading(false);
-                    // console.log(Object.keys(items))
-                    // console.log(Object.values(items)[3])
                 })
         }, 300)
     }, []);
@@ -101,47 +99,14 @@ export default function Users() {
         }
     };
 
-
-    //FlatList 하이라이트 기능 선언부분 (꼭 필요 x)
-    // const ItemSeparatorView = () => {
-    //     return (
-    //         // Flat List Item Separator
-    //         <View
-    //             style={{
-    //                 height: 0.5,
-    //                 width: '100%',
-    //                 backgroundColor: '#C8C8C8',
-    //             }}
-    //         />
-    //     );
-    // };
-
     // Like 관련 설정 코드 ------------------------------------------------
 
 
-    function Like({ item, index }) {
-        const user_id = Constants.installationId;
+    function Like({ item }) {
         firebase_db.ref(`/like/${user_id}`).push(item)
             .then(() => { Alert.alert('<찜 완료>'); })
-        setFavorite(true);
-        console.log(index)
-    }
-    // 저장할 떄 인덱스 키값 넣기 
-
-    function UnLike({ item }) {
-        firebase_db.ref(`/like/`).remove()
-            .then(() => { Alert.alert('<찜 해제 완료>'); })
-        setFavorite(false);
     }
 
-
-
-    // function UnLike({ item, key }) {
-    //     const user_id = Constants.installationId;
-    //     const data_remove = firebase_db.ref(`/like/${user_id}/${item.idx}/`).remove()
-    //         .then(() => { Alert.alert('<찜 해제 완료>'); })
-    //     setFavorite(false);
-    // }
     // //리스트 전체삭제
 
     // function Like() {
@@ -193,13 +158,6 @@ export default function Users() {
                 underlineColorAndroid="transparent"
                 placeholder="검색어를 입력하세요!"
                 autoCorrect={true}   // 자동수정
-            // autoCapitalize="none"   // 자동 대문자
-
-            // autoComplete  // 자동완성 (Android 한정). 끄려면 off
-            // clearTextOnFocus={true}  // true일 경우, 텍스트 자동지움됨
-            // maxLength={1000} // 글자수 제한
-            // clearButtonMode="always"  // 텍스트 보기의 오른쪽에 지우기 버튼 표시됨. 기본값은 never
-            // keyboardType="defualt"
             />
 
             {/* iframe을 보여주기 위한 부분 */}
@@ -219,7 +177,6 @@ export default function Users() {
             {/* Flatlist 부분 */}
             <FlatList
                 data={state}
-                // ItemSeparatorComponent={ItemSeparatorView}
                 keyExtractor={(item, index) => index}
                 renderItem={({ item, index }) => (
                     <View style={styles.cardContainer}>
@@ -239,18 +196,6 @@ export default function Users() {
                                     </Pressable>
                                 </View>
                             </View>
-                            {/* <View style={styles.LikeButton}>
-                                <View style={styles.heartBotton}>
-                                    <Pressable onPress={() => Like({ item, index })} >
-                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
-                                    </Pressable>
-                                </View>
-                                <View style={styles.heartBotton}>
-                                    <Pressable onPress={() => UnLike({ item })} >
-                                        <AntDesign name="hearto" size={30} color="#999" />
-                                    </Pressable>
-                                </View>
-                            </View> */}
                         </TouchableOpacity>
                     </View >
                 )

@@ -1,3 +1,4 @@
+//사용안함 ( 나만의 꿀팁 좋아요 페이지 )
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Alert, LogBox } from 'react-native';
 import LikeCard from '../components/LikeCard';

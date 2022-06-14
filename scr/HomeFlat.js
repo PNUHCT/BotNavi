@@ -234,6 +234,13 @@ export default function Users() {
                             </View>
                             <View style={styles.LikeButton}>
                                 <View style={styles.heartBotton}>
+                                    <Pressable onPress={() => Like({ item })} >
+                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
+                                    </Pressable>
+                                </View>
+                            </View>
+                            {/* <View style={styles.LikeButton}>
+                                <View style={styles.heartBotton}>
                                     <Pressable onPress={() => Like({ item, index })} >
                                         <AntDesign name="heart" size={30} color="#eb4b4b" />
                                     </Pressable>
@@ -243,17 +250,6 @@ export default function Users() {
                                         <AntDesign name="hearto" size={30} color="#999" />
                                     </Pressable>
                                 </View>
-                            </View>
-                            {/* <View style={styles.heartBotton}>
-                                {favorite ?
-                                    <Pressable onPress={() => UnLike({ item })} >
-                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
-                                    </Pressable>
-                                    :
-                                    <Pressable onPress={() => Like({ item })} >
-                                        <AntDesign name="hearto" size={30} color="#999" />
-                                    </Pressable>
-                                }
                             </View> */}
                         </TouchableOpacity>
                     </View >

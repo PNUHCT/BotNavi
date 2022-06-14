@@ -1,3 +1,4 @@
+// 사용안함 ( scrollView 사용할 때 쓰던 firebase 화면 )
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView } from "react-native";
 import Card from '../components/Card';

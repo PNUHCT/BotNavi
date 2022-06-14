@@ -4,10 +4,8 @@ import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
-import Blank from '../data.json'
 
-
-export default function Users(navigation) {
+export default function Users() {
     //-------Flatlist 적용을 위한 useState 등 선언부분-----
     const [loading, setLoading] = useState(true); // 로딩 화면 mount시키기 위한 useState
     const [state, setState] = useState([])
@@ -16,17 +14,17 @@ export default function Users(navigation) {
     const [search, setSearch] = useState('');
     const [TotalDataSource, setTotalDataSource] = useState([]);
     const [favorite, setFavorite] = useState(false);
-
-    // -----iframe 적용부분----------------------------------
+    const [fireKey, setFireKey] = useState();
     const [playing, setPlaying] = useState(true);
-
+    const user_id = Constants.installationId;
+    // user_id 경로 선언 부분 (push나 remove, ref 등 firebase연동에 사용)
+    // -----iframe 적용부분----------------------------------
 
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
             setPlaying(true);
         }
     }, []);
-
 
     // const togglePlaying = useCallback(() => {
     //     setPlaying((prev) => !prev);
@@ -54,6 +52,7 @@ export default function Users(navigation) {
                     if (Like_List === null) {
                         Alert.alert('<찜 없음>', '목록이 없습니다!')
                     } else {
+                        setFireKey(Object.keys(Like_List)) // 데이터 내 모든 realtime database keys
                         setState(Object.values(Like_List))
                         setTotalDataSource(Object.values(Like_List));
                         setLoading(false);
@@ -93,44 +92,13 @@ export default function Users(navigation) {
         }
     };
 
-
-    //FlatList 하이라이트 기능 선언부분 (꼭 필요 x)
-    // const ItemSeparatorView = () => {
-    //     return (
-    //         // Flat List Item Separator
-    //         <View
-    //             style={{
-    //                 height: 0.5,
-    //                 width: '100%',
-    //                 backgroundColor: '#C8C8C8',
-    //             }}
-    //         />
-    //     );
-    // };
-
     // Like 관련 설정 코드 ------------------------------------------------
 
-    // function Select({ item }) {
-    //     if (item.etag == )
-    // }
-
-    function UnLike({ item, index }) {
-        const user_id = Constants.installationId;
-        let FBKey = firebase_db.ref(`/like/${user_id}`).on('value', (snapshot) => {
-            const keys = (snapshot.val());
-            let itemkeys = Object.keys(keys);
-            console.log(itemkeys) //임의의 키 모두 찍힘 => item을 적용해서 하나만 선택하는 경로 찾기
-        })
-
-        // console.log(item.etag)
-        // if (FBKey == Object.keys(item)) {
-        //     FBKey = firebase_db.ref(`/like/${user_id}`).on('value', (snapshot) => {
-        //         const keys = (snapshot.val());
-        //         let itemkeys = Object.keys(keys);
-        //         console.log(itemkeys)
-        //     }).remove()
-        // }
-        // .then(() => { Alert.alert('<찜 해제 완료>'); }, console.log(removing))
+    function UnLike({ index }) {
+        console.log(fireKey[index])
+        let FBKey = fireKey[index]
+        firebase_db.ref(`/like/${user_id}/${FBKey}`).remove()
+            .then(() => { Alert.alert('<찜 해제 완료>'); })
         setFavorite(false);
     }
 
@@ -174,13 +142,12 @@ export default function Users(navigation) {
                 placeholder="검색어를 입력하세요!"
                 autoCorrect={true}   // 자동수정
             // autoCapitalize="none"   // 자동 대문자
-
             // autoComplete  // 자동완성 (Android 한정). 끄려면 off
             // clearTextOnFocus={true}  // true일 경우, 텍스트 자동지움됨
-            // maxLength={1000} // 글자수 제한
             // clearButtonMode="always"  // 텍스트 보기의 오른쪽에 지우기 버튼 표시됨. 기본값은 never
             // keyboardType="defualt"
             />
+
 
             {/* iframe을 보여주기 위한 부분 */}
             <View>
@@ -202,7 +169,7 @@ export default function Users(navigation) {
                 refreshing={isFetching}
                 // ItemSeparatorComponent={ItemSeparatorView}
                 keyExtractor={(item, index) => index.toString()} //<= 여기 값을 조정??
-                renderItem={({ item }) => (
+                renderItem={({ item, index }) => (
                     <View style={styles.cardContainer}>
                         <TouchableOpacity style={styles.card} onPress={() => onPress({ item })}>
                             <Image style={styles.cardImage} source={{ uri: item.snippet.thumbnails.medium.url }} />
@@ -211,32 +178,21 @@ export default function Users(navigation) {
                                 <Text style={styles.cardDesc} numberOfLines={3}>{item.snippet.description}</Text>
                                 <Text style={styles.cardDate}>{item.snippet.publishedAt}</Text>
                                 <Text style={styles.cardDate}>{item.id.videoId}</Text>
+                                <Text style={styles.cardDate}>{index}</Text>
                             </View>
                             <View style={styles.LikeButton}>
-
                                 <View style={styles.heartBotton}>
                                     {/* favorite 대신에 cardID가 있는지 유무 확인 */}
                                     {favorite ?
                                         <Pressable onPress={() => Like({ item })} >
-                                            <AntDesign name="hearto" size={30} color="#999" />
+                                            <AntDesign name="heart" size={30} color="#eb4b4b" />
                                         </Pressable>
                                         :
-                                        <Pressable onPress={() => UnLike({ item })} >
-                                            <AntDesign name="heart" size={30} color="#eb4b4b" />
+                                        <Pressable onPress={() => UnLike({ index })} >
+                                            <AntDesign name="hearto" size={30} color="#999" />
                                         </Pressable>
                                     }
                                 </View>
-
-                                {/* <View style={styles.heartBotton}>
-                                    <Pressable onPress={() => Like({ item })} >
-                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
-                                    </Pressable>
-                                </View>
-                                <View style={styles.heartBotton}>
-                                    <Pressable onPress={() => UnLike({ item })} >
-                                        <AntDesign name="hearto" size={30} color="#999" />
-                                    </Pressable>
-                                </View> */}
                             </View>
                             {/* <View style={styles.heartBotton}>
                                 <Pressable onPress={() => Like({ item })}>

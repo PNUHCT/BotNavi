@@ -1,3 +1,4 @@
+// 사용안함 ( 나만의 꿀팁  메인페이지) 
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 
@@ -113,48 +114,18 @@ export default function MainPage({ navigation, route }) {
     let todayWeather = 10 + 17;
     let todayCondition = "흐림"
     //return 구문 밖에서는 슬래시 두개 방식으로 주석
-    return ready ?  : (
-        /*
-          return 구문 안에서는 {슬래시 + * 방식으로 주석
-        */
-
-
-
-        {/* 나만의 꿀팁 */ }
-      오늘의 날씨: { weather.temp + '°C   ' + weather.condition }
-    { navigation.navigate('AboutPage') }
-}>
-    소개 페이지
-
-
-
-{ category('전체보기') }}> 전체보기
-{ category('생활') }}> 생활
-{ category('재테크') }}> 재테크
-{ category('반려견') }}> 반려견
-{ navigation.navigate('LikePage') }}> 꿀팁 찜
-
-
-{/* 하나의 카드 영역을 나타내는 View */ }
-{
-    cateState.map((content, i) => {
-        return ()
-    })
-}
-
-
-{/* 
-        ca-app-pub-5579008343368676/9202552776
-        ca-app-pub-5579008343368676/6885179499
-      */}
-{
-    Platform.OS === 'ios' ? (
-
-    ): (
-
-        )}
-   
+    return (
+        <View style={styles.container}>
+            <ScrollView>
+                <TouchableOpacity style={styles.middleButtonAll}> {category('전체보기')}</TouchableOpacity>
+                <TouchableOpacity style={styles.middleButton02}>{category('생활')}</TouchableOpacity>
+                <TouchableOpacity style={styles.middleButton03}>{category('재테크')}</TouchableOpacity>
+                <TouchableOpacity style={styles.middleButton04}>{navigation.navigate('LikePage')};</TouchableOpacity>
+            </ScrollView>
+            <View></View>
+        </View>
     )
+
 }
 
 const styles = StyleSheet.create({

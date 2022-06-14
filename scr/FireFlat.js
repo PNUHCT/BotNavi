@@ -5,7 +5,6 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 
-
 export default function Users() {
     //-------Flatlist 적용을 위한 useState 등 선언부분-----
     const [loading, setLoading] = useState(true); // 로딩 화면 mount시키기 위한 useState
@@ -16,7 +15,8 @@ export default function Users() {
     const [TotalDataSource, setTotalDataSource] = useState([]);
     const [favorite, setFavorite] = useState(false);
     const [test, setTest] = useState(true);
-
+    const [fireKey, setFireKey] = useState();
+    const user_id = Constants.installationId;
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
 
@@ -38,24 +38,6 @@ export default function Users() {
     }
 
     // ---Firebase를 대입하기 위한 부분 --------
-    // useEffect(() => {
-    //     setLoading(true);
-
-    //     firebase_db.ref('/TGBSitems')
-    //         .once('value')
-    //         .then((snapshot) => {
-    //             console.log("TGBS에서 데이터 가져왔습니다!!")
-    //             let TGBSitems = snapshot.val()
-    //             setState(TGBSitems)
-    //             setTotalDataSource(TGBSitems);
-    //             setLoading(false);
-    //             console.log(Object.keys(TGBSitems)[4])
-
-    //         })
-    //         .catch(err => { setLoading(false); setError(err); })
-    // }, []);
-
-
     useEffect(() => {
         setTimeout(() => {
             setLoading(true);
@@ -69,6 +51,11 @@ export default function Users() {
                     setLoading(false);
                     console.log(Object.keys(TGBSitems)[4])
                 })
+
+            firebase_db.ref(`/like/${user_id}`).on('value', (snapshot) => {
+                const Like_List = (snapshot.val());
+                setFireKey(Object.keys(Like_List))
+            })
         }, 300)
     }, []);
 
@@ -93,16 +80,15 @@ export default function Users() {
     };
 
     function Like({ item }) {
-        const user_id = Constants.installationId;
-        const data_push = firebase_db.ref(`/like/${user_id}`).push(item)
+        firebase_db.ref(`/like/${user_id}`).push(item)
             .then(() => { Alert.alert('<찜 완료>'); })
         setFavorite(true);
     }
 
-    // function UnLike({ item }) {
-    //     const LikeData = firebase_db.ref(`/like`)
-    //     const itemKey = Object.keys(LikeData);
-    //     firebase_db.ref(`/like/${itemKey}`).remove()
+    // function UnLike({ index }) {
+    //     console.log(fireKey[index])
+    //     let FBKey = fireKey[index]
+    //     firebase_db.ref(`/like/${user_id}/${FBKey}`).remove()
     //         .then(() => { Alert.alert('<찜 해제 완료>'); })
     //     setFavorite(false);
     // }
@@ -130,12 +116,6 @@ export default function Users() {
         );
     }
 
-    //찜하기 함수 테스트중
-
-    const Favorite = ({ item }) => {
-        if (item.id.videoId == undefined) { <Like /> }
-        else { <UnLike /> }
-    }
 
 
     // 렌더링용 메인 return부분 ------------------------------------------------------
@@ -197,20 +177,24 @@ export default function Users() {
                                         <AntDesign name="heart" size={30} color="#eb4b4b" />
                                     </Pressable>
                                 </View>
+                            </View>
+                            {/* <View style={styles.LikeButton}>
                                 <View style={styles.heartBotton}>
-                                    <Pressable onPress={() => UnLike({ item })} >
-                                        <AntDesign name="hearto" size={30} color="#999" />
+                                    <Pressable onPress={() => Like({ item })} >
+                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
                                     </Pressable>
                                 </View>
-                            </View>
+                            </View> */}
                             {/* <View style={styles.heartBotton}>
-                                <Pressable onPress={() => Like({ item })}>
-                                    {favorite ?
-                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
-                                        :
+                                {favorite ?
+                                    <Pressable onPress={() => UnLike({ item })}>
                                         <AntDesign name="hearto" size={30} color="#999" />
-                                    }
-                                </Pressable>
+                                    </Pressable>
+                                    :
+                                    <Pressable onPress={() => Like({ item })}>
+                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
+                                    </Pressable>
+                                }
                             </View> */}
                         </TouchableOpacity>
                     </View>

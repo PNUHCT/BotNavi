@@ -13,16 +13,14 @@ export default function Users() {
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
     const [TotalDataSource, setTotalDataSource] = useState([]);
-    const [favorite, setFavorite] = useState(false);
-    const [test, setTest] = useState(true);
-    const [fireKey, setFireKey] = useState();
+    const [QueList, setQueList] = useState();
+    const [FBKeys, setFBKeys] = useState();
     const user_id = Constants.installationId;
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
 
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
-            setTest(false)
             setPlaying(true);
         }
     }, []);
@@ -31,11 +29,24 @@ export default function Users() {
     // }, []);
 
     // ---------- CardID에 videoId 할당해주는 부분
-    const onPress = ({ item }) => {
+    const onPress = ({ item, index }) => {
+        // console.log(Object.keys(item)[0])
+        const SelectedKey = FBKeys[index]  // 선택된 index. 즉, realtime database내 item의 index로 된 키값 중 선택된 index키값만(인덱스에 맞는 키값)
+        // console.log(FBKeys[index])
+        // console.log(VID)
+        // 선택한 카드의 인덱스 넘버~리스트 끝 인덱스 넘버까지 반복문으로 얻음
+        const result = []; // 빈 Array로써, 인덱스값에 따른 videoID들이 push된다. // 새로 누르면, 기존 데이터에 update혹은 set으로 덮어쓰기 구현해야함.
+        for (let i = SelectedKey; i < state.length; i++) {
+            result.push(state[i].id.videoId)
+        }
+        // console.log(result)
+        //현재는 videoID를 불러와 Array로 만들어주기까지만 성공
         return (
+            setQueList(result),
             setCardID(item.id.videoId)
         )
     }
+
 
     // ---Firebase를 대입하기 위한 부분 --------
     useEffect(() => {
@@ -46,16 +57,12 @@ export default function Users() {
                 .on('value', (snapshot) => {
                     console.log("TGBS에서 데이터 가져왔습니다!!")
                     const TGBSitems = (snapshot.val());
+                    setFBKeys(Object.keys(TGBSitems)) // realtime database의 item에 있는 인덱스 넘버로 된 키값들
                     setState(TGBSitems)
                     setTotalDataSource(TGBSitems);
                     setLoading(false);
                     console.log(Object.keys(TGBSitems)[4])
                 })
-
-            firebase_db.ref(`/like/${user_id}`).on('value', (snapshot) => {
-                const Like_List = (snapshot.val());
-                setFireKey(Object.keys(Like_List))
-            })
         }, 300)
     }, []);
 
@@ -79,19 +86,12 @@ export default function Users() {
         }
     };
 
+
+    // 찜 기능
     function Like({ item }) {
         firebase_db.ref(`/like/${user_id}`).push(item)
             .then(() => { Alert.alert('<찜 완료>'); })
-        setFavorite(true);
     }
-
-    // function UnLike({ index }) {
-    //     console.log(fireKey[index])
-    //     let FBKey = fireKey[index]
-    //     firebase_db.ref(`/like/${user_id}/${FBKey}`).remove()
-    //         .then(() => { Alert.alert('<찜 해제 완료>'); })
-    //     setFavorite(false);
-    // }
 
 
     //ActivityIndicator는 로딩 중 돌아가는 동그라미
@@ -141,15 +141,9 @@ export default function Users() {
                     // playList={[비디오아이디리스트] 또는 playlist코드}
                     // playListStartIndex={인덱스 넘버}
                     onChangeState={onStateChange}
-                    forceAndroidAutoplay={true}
+                    playList={QueList}
                     playerVars={{
-                        background: 1,
-                        frameborder: 0,
-                        autoplay: 1,
-                        mute: 1
-                    }}
-                    InitialPlayerParams={{
-                        loop: true
+                        background: 1
                     }}
                 />
                 {/* <Button title={playing ? "pause" : "play"} onPress={togglePlaying} /> */}
@@ -178,24 +172,6 @@ export default function Users() {
                                     </Pressable>
                                 </View>
                             </View>
-                            {/* <View style={styles.LikeButton}>
-                                <View style={styles.heartBotton}>
-                                    <Pressable onPress={() => Like({ item })} >
-                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
-                                    </Pressable>
-                                </View>
-                            </View> */}
-                            {/* <View style={styles.heartBotton}>
-                                {favorite ?
-                                    <Pressable onPress={() => UnLike({ item })}>
-                                        <AntDesign name="hearto" size={30} color="#999" />
-                                    </Pressable>
-                                    :
-                                    <Pressable onPress={() => Like({ item })}>
-                                        <AntDesign name="heart" size={30} color="#eb4b4b" />
-                                    </Pressable>
-                                }
-                            </View> */}
                         </TouchableOpacity>
                     </View>
                 )} />

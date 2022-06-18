@@ -16,6 +16,7 @@ export default function Users() {
     const [favorite, setFavorite] = useState(false);
     const [fireKey, setFireKey] = useState();
     const [playing, setPlaying] = useState(true);
+    const [QueList, setQueList] = useState();
     const user_id = Constants.installationId;
     // user_id 경로 선언 부분 (push나 remove, ref 등 firebase연동에 사용)
     // -----iframe 적용부분----------------------------------
@@ -32,8 +33,17 @@ export default function Users() {
 
 
     // ---------- CardID에 videoId 할당해주는 부분
-    const onPress = ({ item }) => {
+    const onPress = ({ item, index }) => {
+        // console.log(index);
+        // console.log(SelectedKey);
+        // console.log(fireKey);
+        // console.log(state[index].id.videoId)
+        const result = [];
+        for (let i = index; i < fireKey.length; i++) {
+            result.push(state[i].id.videoId)
+        }
         return (
+            setQueList(result),
             setCardID(item.id.videoId)
         )
     }
@@ -155,7 +165,7 @@ export default function Users() {
                     play={playing}
                     videoId={cardID}
                     onChangeState={onStateChange}
-
+                    playList={QueList}
                 />
                 {/* <Button title={playing ? "pause" : "play"} onPress={togglePlaying} /> */}
             </View>
@@ -167,10 +177,10 @@ export default function Users() {
                 onRefresh={onRefresh}
                 refreshing={isFetching}
                 // ItemSeparatorComponent={ItemSeparatorView}
-                keyExtractor={(item, index) => index.toString()} //<= 여기 값을 조정??
+                keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => (
                     <View style={styles.cardContainer}>
-                        <TouchableOpacity style={styles.card} onPress={() => onPress({ item })}>
+                        <TouchableOpacity style={styles.card} onPress={() => onPress({ item, index })}>
                             <Image style={styles.cardImage} source={{ uri: item.snippet.thumbnails.medium.url }} />
                             <View style={styles.cardText}>
                                 <Text style={styles.cardTitle} numberOfLines={1}>{item.snippet.title}</Text>

@@ -9,56 +9,43 @@ export default function Users() {
     //-------Flatlist 적용을 위한 useState 등 선언부분-----
     const [loading, setLoading] = useState(true); // 로딩 화면 mount시키기 위한 useState
     const [state, setState] = useState([])
-    const [cardID, setCardID] = useState(["i4S5hvPG9ZY"])
+    const [cardID, setCardID] = useState()
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
     const [TotalDataSource, setTotalDataSource] = useState([]);
-    const [favorite, setFavorite] = useState(false);
+    const [QueList, setQueList] = useState();
+    const [FBKeys, setFBKeys] = useState();
     const user_id = Constants.installationId;
     //  HAlbn3WHw6Q 사쿠란보
 
-
     // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
-    // HAlbn3WHw6Q
     const onStateChange = (state) => {
         if (state === "ended") {
-            setCardID("HAlbn3WHw6Q");
-            // ended가 되면=>cardID에 test가 들어감=>test는 videoId가 되어야 함
-            // cardID에 들어갈 공식: (선택한 item의 index + 1) = index, Object.keys(index)가 임의의 키값이 나온다면,
-            // 그에 대한 .id.videoId
-            // cardID가 바뀐 후 다시 playing이 true가 되어, 연속재생됨.
-            setPlaying(true);  // <=이거 false로 바꾸면 터치시 바로재생이 안됨.
-            //외부 function은 안먹힘
-            //console.log는 먹힘
-            //즉, 내부에서 선언하는 것은 먹힌다는 소리
-            //useState는 먹힘
-            return (state)
+            setPlaying(true);
         }
     };
-
-
-    const test = ({ item, state }) => {
-        // 현재 끝난 item값의 다음 index에 해당하는 videoI로 바뀌도록 반복함수 만들기
-        // for(시작조건;끝나는 조건;반복 조건) 사용하기?
-        const itemID = Object.keys(item)
-        if (onStateChange(state) === 'ended') {
-            console.log(itemID) // flatlist에서 test라는 함수를 통해 index = {item}으로 받아올 경우, 선택한 카드의 json데이터 받아옴
-            // 만약 index = { index }올 받아올 경우엔 index번호로 받아옴
-            // return (testID)
-        }
-    }
 
     // const togglePlaying = useCallback(() => {
     //     setPlaying((prev) => !prev);
     // }, []);
 
+
     // ---------- CardID에 videoId 할당해주는 부분
     const onPress = ({ item, index }) => {
-        // console.log(item.snippet.publishedAt)
         // console.log(Object.keys(item)[0])
-        console.log(Object.values(index)[0])
+        const SelectedKey = FBKeys[index]  // 선택된 index. 즉, realtime database내 item의 index로 된 키값 중 선택된 index키값만(인덱스에 맞는 키값)
+        // console.log(FBKeys[index])
+        // console.log(VID)
+        // 선택한 카드의 인덱스 넘버~리스트 끝 인덱스 넘버까지 반복문으로 얻음
+        const result = []; // 빈 Array로써, 인덱스값에 따른 videoID들이 push된다. // 새로 누르면, 기존 데이터에 update혹은 set으로 덮어쓰기 구현해야함.
+        for (let i = SelectedKey; i < state.length; i++) {
+            result.push(state[i].id.videoId)
+        }
+        // console.log(result)
+        //현재는 videoID를 불러와 Array로 만들어주기까지만 성공
         return (
+            setQueList(result),
             setCardID(item.id.videoId)
         )
     }
@@ -73,6 +60,8 @@ export default function Users() {
                 .on('value', (snapshot) => {
                     console.log("items에서 데이터 가져왔습니다!!")
                     const items = (snapshot.val());
+                    setFBKeys(Object.keys(items)) // realtime database의 item에 있는 인덱스 넘버로 된 키값들
+                    console.log(FBKeys)
                     setState(items)
                     setTotalDataSource(items);
                     setLoading(false);
@@ -167,7 +156,10 @@ export default function Users() {
                     play={playing}
                     videoId={cardID}
                     onChangeState={onStateChange}
-                // cueVideoById={'HAlbn3WHw6Q'}
+                    playList={QueList}
+                    playerVars={{
+                        background: 1
+                    }}
                 />
                 {/* <Button title={playing ? "pause" : "pzzlay"} onPress={togglePlaying} /> */}
             </View>
@@ -187,7 +179,7 @@ export default function Users() {
                                 <Text style={styles.cardDesc} numberOfLines={3}>{item.snippet.description}</Text>
                                 <Text style={styles.cardDate}>{item.snippet.publishedAt}</Text>
                                 <Text style={styles.cardDate}>{item.id.videoId}</Text>
-                                <Text style={styles.cardDate} >{test(index = { item })}</Text>
+                                <Text style={styles.cardDate} >{index}</Text>
                             </View>
                             <View style={styles.LikeButton}>
                                 <View style={styles.heartBotton}>

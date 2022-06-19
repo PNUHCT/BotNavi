@@ -15,16 +15,17 @@ export default function Users() {
     const [TotalDataSource, setTotalDataSource] = useState([]);
     const [QueList, setQueList] = useState();
     const [FBKeys, setFBKeys] = useState();
+    const [playing, setPlaying] = useState(true);
     const user_id = Constants.installationId;
     //  HAlbn3WHw6Q 사쿠란보
 
     // -----iframe 적용부분----------------------------------
-    const [playing, setPlaying] = useState(true);
-    const onStateChange = (state) => {
+
+    const onStateChange = useCallback((state) => {
         if (state === "ended") {
             setPlaying(true);
         }
-    };
+    });
 
     // const togglePlaying = useCallback(() => {
     //     setPlaying((prev) => !prev);
@@ -61,7 +62,6 @@ export default function Users() {
                     console.log("items에서 데이터 가져왔습니다!!")
                     const items = (snapshot.val());
                     setFBKeys(Object.keys(items)) // realtime database의 item에 있는 인덱스 넘버로 된 키값들
-                    console.log(FBKeys)
                     setState(items)
                     setTotalDataSource(items);
                     setLoading(false);
@@ -157,6 +157,7 @@ export default function Users() {
                     videoId={cardID}
                     onChangeState={onStateChange}
                     playList={QueList}
+                    onFullScreenChange={0}
                     playerVars={{
                         background: 1
                     }}

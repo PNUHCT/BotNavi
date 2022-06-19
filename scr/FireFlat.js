@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert } from 'react-native';
+import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert, Button } from 'react-native';
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
@@ -9,24 +9,29 @@ export default function Users() {
     //-------Flatlist 적용을 위한 useState 등 선언부분-----
     const [loading, setLoading] = useState(true); // 로딩 화면 mount시키기 위한 useState
     const [state, setState] = useState([])
-    const [cardID, setCardID] = useState(["i4S5hvPG9ZY"])
+    const [cardID, setCardID] = useState()
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
     const [TotalDataSource, setTotalDataSource] = useState([]);
     const [QueList, setQueList] = useState();
     const [FBKeys, setFBKeys] = useState();
-    const user_id = Constants.installationId;
-    // -----iframe 적용부분----------------------------------
     const [playing, setPlaying] = useState(true);
+    const user_id = Constants.installationId;
+    //  HAlbn3WHw6Q 사쿠란보
+
+    // -----iframe 적용부분----------------------------------
 
     const onStateChange = useCallback((state) => {
         if (state === "ended") {
             setPlaying(true);
         }
-    }, []);
+    });
+
+
     // const togglePlaying = useCallback(() => {
     //     setPlaying((prev) => !prev);
     // }, []);
+
 
     // ---------- CardID에 videoId 할당해주는 부분
     const onPress = ({ item, index }) => {
@@ -55,17 +60,15 @@ export default function Users() {
             firebase_db
                 .ref('/TGBSitems')
                 .on('value', (snapshot) => {
-                    console.log("TGBS에서 데이터 가져왔습니다!!")
-                    const TGBSitems = (snapshot.val());
-                    setFBKeys(Object.keys(TGBSitems)) // realtime database의 item에 있는 인덱스 넘버로 된 키값들
-                    setState(TGBSitems)
-                    setTotalDataSource(TGBSitems);
+                    console.log("items에서 데이터 가져왔습니다!!")
+                    const items = (snapshot.val());
+                    setFBKeys(Object.keys(items)) // realtime database의 item에 있는 인덱스 넘버로 된 키값들
+                    setState(items)
+                    setTotalDataSource(items);
                     setLoading(false);
-                    console.log(Object.keys(TGBSitems)[4])
                 })
         }, 300)
     }, []);
-
 
     // SearchBar 검색기능 선언부분--------------------------------------------------------
 
@@ -86,12 +89,29 @@ export default function Users() {
         }
     };
 
+    // Like 관련 설정 코드 ------------------------------------------------
 
-    // 찜 기능
+
     function Like({ item }) {
         firebase_db.ref(`/like/${user_id}`).push(item)
             .then(() => { Alert.alert('<찜 완료>'); })
     }
+
+    // //리스트 전체삭제
+
+    // function Like() {
+    //     const user_id = Constants.installationId;
+
+    //     if (setFavorite(false)) {
+    //         firebase_db.ref('/like/' + user_id + '/Drum/' + state.idx).set(state)
+    //         setFavorite(true);
+    //     }
+    //     else if (setFavorite(true)) {
+    //         const data_remove = firebase_db.ref(`/like/${user_id}/Drum/${state.idx}`).remove()
+    //         setFavorite(false);
+    //     }
+    // }
+
 
 
     //ActivityIndicator는 로딩 중 돌아가는 동그라미
@@ -116,8 +136,6 @@ export default function Users() {
         );
     }
 
-
-
     // 렌더링용 메인 return부분 ------------------------------------------------------
     return (
         <View style={styles.container}>
@@ -129,7 +147,7 @@ export default function Users() {
                 value={search}
                 underlineColorAndroid="transparent"
                 placeholder="검색어를 입력하세요!"
-                autoCorrect={true}
+                autoCorrect={true}   // 자동수정
             />
 
             {/* iframe을 보여주기 위한 부분 */}
@@ -138,22 +156,20 @@ export default function Users() {
                     height={200}
                     play={playing}
                     videoId={cardID}
-                    // playList={[비디오아이디리스트] 또는 playlist코드}
-                    // playListStartIndex={인덱스 넘버}
                     onChangeState={onStateChange}
                     playList={QueList}
+                    onFullScreenChange={true}
                     playerVars={{
                         background: 1
                     }}
                 />
-                {/* <Button title={playing ? "pause" : "play"} onPress={togglePlaying} /> */}
+                {/* <Button title={playing ? "pause" : "pzzlay"} onPress={togglePlaying} /> */}
             </View>
-
 
             {/* Flatlist 부분 */}
             <FlatList
                 data={state}
-                // keyExtractor={(index) => index.toString()}
+                keyExtractor={(item, index) => index}
                 renderItem={({ item, index }) => (
                     <View style={styles.cardContainer}>
                         <TouchableOpacity style={styles.card} onPress={() => onPress({ item, index })}>
@@ -163,7 +179,7 @@ export default function Users() {
                                 <Text style={styles.cardDesc} numberOfLines={3}>{item.snippet.description}</Text>
                                 <Text style={styles.cardDate}>{item.snippet.publishedAt}</Text>
                                 <Text style={styles.cardDate}>{item.id.videoId}</Text>
-                                <Text style={styles.cardDate}>{index}</Text>
+                                <Text style={styles.cardDate} >{index}</Text>
                             </View>
                             <View style={styles.LikeButton}>
                                 <View style={styles.heartBotton}>
@@ -173,8 +189,9 @@ export default function Users() {
                                 </View>
                             </View>
                         </TouchableOpacity>
-                    </View>
-                )} />
+                    </View >
+                )
+                } />
         </View >
     );
 }

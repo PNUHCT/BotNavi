@@ -6,14 +6,14 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 
-
 export default function Test() {
 
 
     return (
         // <TestOne />
         <SafeAreaView style={styles.Maincontainer}>
-            <Text>
+
+            {/* <Text>
                 {`
                    이곳은 실험실입니다.
 
@@ -21,7 +21,9 @@ export default function Test() {
 
                    호롤로롤로
                 `}
-            </Text>
+            </Text> */}
+
+
         </SafeAreaView>
 
     );

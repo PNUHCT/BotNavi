@@ -1,27 +1,27 @@
-import React, { useState, useEffect, useCallback, Children } from 'react';
-import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert, SafeAreaView } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { ActivityIndicator, FlatList, View, Text, Image, StyleSheet, TouchableOpacity, TextInput, Pressable, Alert, SafeAreaView, Button } from 'react-native';
 import TestOne from '../components/TestOne';
 import { firebase_db } from '../firebaseConfig';
 import YoutubePlayer from "react-native-youtube-iframe";
 import { AntDesign } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 
+
+
 export default function Test() {
 
-
     return (
-        // <TestOne />
+        //     // <TestOne />
         <SafeAreaView style={styles.Maincontainer}>
-
-            {/* <Text>
+            <Text>
                 {`
-                   이곳은 실험실입니다.
+                이곳은 실험실입니다.
 
-                   나만의 테스트공간
+                나만의 테스트공간
 
-                   호롤로롤로
+                호롤로롤로
                 `}
-            </Text> */}
+            </Text>
 
 
         </SafeAreaView>

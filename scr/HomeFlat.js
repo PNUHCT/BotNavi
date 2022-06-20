@@ -34,22 +34,34 @@ export default function Users() {
 
     // ---------- CardID에 videoId 할당해주는 부분
     const onPress = ({ item, index }) => {
-        // console.log(Object.keys(item)[0])
-        const SelectedKey = FBKeys[index]  // 선택된 index. 즉, realtime database내 item의 index로 된 키값 중 선택된 index키값만(인덱스에 맞는 키값)
-        // console.log(FBKeys[index])
-        // console.log(VID)
-        // 선택한 카드의 인덱스 넘버~리스트 끝 인덱스 넘버까지 반복문으로 얻음
-        const result = []; // 빈 Array로써, 인덱스값에 따른 videoID들이 push된다. // 새로 누르면, 기존 데이터에 update혹은 set으로 덮어쓰기 구현해야함.
-        for (let i = SelectedKey; i < state.length; i++) {
+        const result = [];
+        for (let i = index; i < state.length; i++) {
             result.push(state[i].id.videoId)
         }
-        // console.log(result)
-        //현재는 videoID를 불러와 Array로 만들어주기까지만 성공
         return (
             setQueList(result),
             setCardID(item.id.videoId)
         )
     }
+
+    // 파이어베이스의 인덱스 넘버를 기준으로 쓸 경우
+    // const onPress = ({ item, index }) => {
+    //     // console.log(Object.keys(item)[0])
+    //     const SelectedKey = FBKeys[index]  // 선택된 index. 즉, realtime database내 item의 index로 된 키값 중 선택된 index키값만(인덱스에 맞는 키값)
+    //     // console.log(FBKeys[index])
+    //     // console.log(VID)
+    //     // 선택한 카드의 인덱스 넘버~리스트 끝 인덱스 넘버까지 반복문으로 얻음
+    //     const result = []; // 빈 Array로써, 인덱스값에 따른 videoID들이 push된다. // 새로 누르면, 기존 데이터에 update혹은 set으로 덮어쓰기 구현해야함.
+    //     for (let i = SelectedKey; i < state.length; i++) {
+    //         result.push(state[i].id.videoId)
+    //     }
+    //     // console.log(result)
+    //     //현재는 videoID를 불러와 Array로 만들어주기까지만 성공
+    //     return (
+    //         setQueList(result),
+    //         setCardID(item.id.videoId)
+    //     )
+    // }
 
 
     // ---Firebase를 대입하기 위한 부분 --------
@@ -61,7 +73,7 @@ export default function Users() {
                 .on('value', (snapshot) => {
                     console.log("items에서 데이터 가져왔습니다!!")
                     const items = (snapshot.val());
-                    setFBKeys(Object.keys(items)) // realtime database의 item에 있는 인덱스 넘버로 된 키값들
+                    // setFBKeys(Object.keys(items)) // realtime database의 item에 있는 인덱스 넘버로 된 키값들 // 파이어베이스 인덱스 쓸 경우 사용
                     setState(items)
                     setTotalDataSource(items);
                     setLoading(false);

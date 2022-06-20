@@ -1,4 +1,4 @@
-import { getPlayList } from '../../service/DataProcessor';
+import { getPlayList } from './DataProcessor';
 
 const LectureList = ({ navigation, plId, lecture }) => {
     const [playList, setPlayList] = useState(null);

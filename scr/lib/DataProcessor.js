@@ -1,4 +1,5 @@
-import _getPlayList from '../lib/YouTubeAPI';
+
+import _getPlayList from './YouTubeAPI';
 
 async function getPlayList(plId) {
     let res;

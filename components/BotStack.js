@@ -8,6 +8,7 @@ import FireFlat from "../scr/FireFlat";
 import Likepage from "../scr/LikePage";
 import TestPage from "../scr/TestPage";
 import HomePage from "../scr/HomeFlat";
+import Workpage from "../scr/WorkMusic";
 
 // TabStack은 TabBar를 만드는 네비게이션옵션을 선언해준거다.
 // webviewStack은 webview를 StackNavigation해주기 위해 선언해준거다.
@@ -25,6 +26,18 @@ const FBStackScreen = () => {
             <FBStack.Screen
                 name="about"
                 component={FireFlat}
+                options={{ headerShown: false }}
+            />
+        </FBStack.Navigator>
+    );
+};
+
+const WorkStackScreen = () => {
+    return (
+        <FBStack.Navigator>
+            <FBStack.Screen
+                name="about"
+                component={Workpage}
                 options={{ headerShown: false }}
             />
         </FBStack.Navigator>
@@ -98,12 +111,13 @@ const TestScreen = () => {
 // MaterialCommunityIcons name으로 원하는 아이콘 설정해주자.
 const TabStackScreen = () => {
     return (
-        <TabStack.Navigator screenOptions={{ tabBarActiveTintColor: '#e91e63', headerShown: false }} backBehavior="history" initialRouteName="홈" sceneContainerStyle={{ marginTop: 30 }}>
+        <TabStack.Navigator screenOptions={{ tabBarActiveTintColor: '#eb4b4b', headerShown: false }} backBehavior="history" initialRouteName="홈" sceneContainerStyle={{ marginTop: 30 }}>
             <TabStack.Screen name="파이어베이스" component={FBStackScreen} options={{ tabBarLabel: 'Firebase', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="cloud" color={color} size={size} />), }} />
-            <TabStack.Screen name="웹뷰" component={YoutubeStackScreen} options={{ tabBarLabel: 'Youtube', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="youtube" color={color} size={size} />), }} />
+            {/* <TabStack.Screen name="웹뷰" component={YoutubeStackScreen} options={{ tabBarLabel: 'Youtube', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="youtube" color={color} size={size} />), }} /> */}
             <TabStack.Screen name="홈" component={HomeStackScreen} options={{ tabBarLabel: 'Home', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="home" color={color} size={size} />), }} />
+            <TabStack.Screen name="노동요" component={WorkStackScreen} options={{ tabBarLabel: 'Work', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="book" color={color} size={size} />), }} />
             <TabStack.Screen name="찜 페이지" component={LikeStackScreen} options={{ tabBarLabel: 'Like', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="star" color={color} size={size} />), }} />
-            <TabStack.Screen name="테스트 페이지" component={TestScreen} options={{ tabBarLabel: 'TestRoom', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="account" color={color} size={size} />), }} />
+            {/* <TabStack.Screen name="테스트 페이지" component={TestScreen} options={{ tabBarLabel: 'TestRoom', tabBarIcon: ({ color, size }) => (<MaterialCommunityIcons name="account" color={color} size={size} />), }} /> */}
         </TabStack.Navigator>
     );
 };

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "DJPlayerProto",
-    "slug": "djplayerproto",
+    "name": "Dsplayer",
+    "slug": "dsplayer",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,6 +29,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "description": "DJ_PlayerProto_type"
+    "description": "동진s player. (only firebas data, Only video)"
   }
 }

@@ -20,24 +20,25 @@ export default function Test() {
     const [FBKeys, setFBKeys] = useState();
     const [QueList, setQueList] = useState();
     const [playing, setPlaying] = useState(true);
+    const [search, setSearch] = useState('');
     const user_id = Constants.installationId;
 
 
     // Youtube API parameters 설정부분
     const params = {
-        key: "AIzaSyBlIe1zQ0n09sQNOvb9_6qg_Frizu9IHnw",
-        part: "snippet",
-        maxResults: 20,
-        q: keywords,
-        type: "video"
+        key: "AIzaSyDNZL7vx2kDhnoUt6kPQuR95uJR2lRZdfs",
+        part: 'snippet',
+        term: `${keywords}`,
+        maxResults: 5,
+        type: 'video',
     };
 
 
     // 유튜브 API searching 기능 부분
-    YTSearch(params, result => {
+    YTSearch({ key: "AIzaSyDNZL7vx2kDhnoUt6kPQuR95uJR2lRZdfs", part: 'snippet', q: `${keywords}`, maxResults: 5, type: 'video' }, result => {
         console.log(result);
         setState(result);
-        setTotalDataSource(result);
+        // setTotalDataSource(result);
     });
 
 
@@ -62,15 +63,34 @@ export default function Test() {
         )
     }
 
+    const searchFilter = (text) => {
+        if (text) {
+            const newData = TotalDataSource.filter(function (item) {
+                const itemData = item.snippet.title
+                    ? item.snippet.title.toUpperCase()
+                    : ''.toUpperCase();
+                const textData = text.toUpperCase();
+                return itemData.indexOf(textData) > -1;
+            });
+            setState(newData);
+            setSearch(text);
+        } else {
+            setState(TotalDataSource);
+            setSearch(text);
+        }
+    };
+
     // 렌더링 부분
     return (
         <View style={styles.container}>
             <TextInput
                 style={styles.textContainer}
-                onChangeText={(text) => setKeywords(text)} // text로 검색어 전달 (검색기능 토글 추가하기)
+                onChangeText={(text) => searchFilter(text)} // text로 검색어 전달 (검색기능 토글 추가하기)
                 placeholder="검색어를 입력하세요!"
                 underlineColorAndroid="transparent"
-                value={TotalDataSource}>
+                onEndEditing={(event) => this.setKeywords({ value: event.nativeEvent.text })}
+                // onEndEditing={(text) => setKeywords(text)}
+                value={search}>
             </TextInput>
 
             <View>

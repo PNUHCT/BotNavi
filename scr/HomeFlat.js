@@ -152,14 +152,18 @@ export default function Users() {
         <View style={styles.container}>
 
             {/* SarchBar 부분 */}
-            <TextInput
-                style={styles.textContainer}
-                onChangeText={(text) => searchFilter(text)}
-                value={search}
-                underlineColorAndroid="transparent"
-                placeholder="검색어를 입력하세요!"
-                autoCorrect={true}   // 자동수정
-            />
+            <View style={styles.textContainerContainer}>
+                <TextInput
+                    style={styles.textContainer}
+                    onChangeText={(text) => searchFilter(text)}
+                    value={search}
+                    underlineColorAndroid="transparent"
+                    placeholder="검색어를 입력하세요!"
+                    // onEndEditing={() => console.log("onEndEditing")}
+                    // onSubmitEditing
+                    autoCorrect   // 자동수정
+                />
+            </View>
 
             {/* iframe을 보여주기 위한 부분 */}
             <View>
@@ -192,7 +196,7 @@ export default function Users() {
                                 <Text style={styles.cardDesc} numberOfLines={3}>{item.snippet.description}</Text>
                                 <Text style={styles.cardDate}>{item.snippet.publishedAt}</Text>
                                 <Text style={styles.cardDate}>{item.id.videoId}</Text>
-                                <Text style={styles.cardDate} >{index}</Text>
+                                {/* <Text style={styles.cardDate} >{index}</Text> */}
                             </View>
                             <View style={styles.LikeButton}>
                                 <View style={styles.heartBotton}>
@@ -212,10 +216,10 @@ export default function Users() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#000',
     },
     cardContainer: {
-        backgroundColor: '#fff',
+        backgroundColor: '#000',
     },
     card: {
         flex: 1,
@@ -224,7 +228,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         margin: 10,
         borderBottomWidth: 0.5,
-        borderBottomColor: "#eee",
+        borderBottomColor: "#A6A6A6",
         paddingBottom: 10
     },
     cardImage: {
@@ -237,23 +241,31 @@ const styles = StyleSheet.create({
         flex: 2,
         flexDirection: "column",
         marginLeft: 10,
+
     },
     cardTitle: {
         fontSize: 20,
-        fontWeight: "700"
+        fontWeight: "700",
+        color: '#fff'
     },
     cardDesc: {
-        fontSize: 15
+        fontSize: 15,
+        color: '#A6A6A6'
     },
     cardDate: {
         fontSize: 10,
         color: "#A6A6A6",
     },
+    textContainerContainer: {
+        backgroundColor: '#fff',
+        fontSize: 20,
+        margin: 5,
+    },
     textContainer: {
         backgroundColor: '#fff',
-        paddingHorizontal: 20,
+        paddingHorizontal: 5,
         fontSize: 20,
-        margin: 10,
+        margin: 5,
     },
     heartBotton: {
         alignItems: "center",

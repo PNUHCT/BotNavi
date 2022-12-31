@@ -6,11 +6,15 @@
     "orientation": "portrait",
     "icon": "./assets/playerIcon.png",
     "userInterfaceStyle": "light",
+    "extra": {
+      "eas": {
+        "projectId": "7cc8c45a-b351-4cd8-ad96-b77149886be1"
+      }
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff",
-
+      "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

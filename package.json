@@ -58,7 +58,7 @@
     "react-native-vector-icons": "9.1.0",
     "react-native-web": "0.17.7",
     "react-native-web-webview": "^1.0.2",
-    "react-native-webview": "11.18.1",
+    "react-native-webview": "^11.26.0",
     "react-native-youtube": "2.0.2",
     "react-native-youtube-iframe": "2.2.2",
     "react-redux": "8.0.1",
@@ -68,7 +68,8 @@
     "youtube-search-api": "1.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "jetifier": "^2.0.0"
   },
   "private": true
 }

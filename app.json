@@ -4,7 +4,7 @@
     "slug": "dsplayer",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/playerIcon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -17,18 +17,29 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "packagerOpts": {
+      "port": 53833
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nyong.dsplayer",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+        "backgroundColor": "#FFFFFF",
+      },
+      "package": "com.nyong.dsplayer",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/playerIcon.png"
     },
-    "description": "동진s player. (only firebas data, Only video)"
+    "description": "D's player. (only firebase data, Only video)"
   }
 }

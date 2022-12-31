@@ -50,8 +50,24 @@ export default function Youtube({ url }) {
         }
     };
 
+    // cors test
+    const handleAPI2 = async () => {
+        await fetch('https://8bda-222-233-138-154.jp.ngrok.io/batteries/2', {
+          mode: 'no-cors',
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+          credentials: 'same-origin',
+        }).then((res) => console.log(res));
+    };
+
+
     // 실제로 화면에 띄울 WebView화면 구성
     return (
+        <view>
+            <button onClick={handleAPI2}>test!</button>
         <WebView
             source={{
                 uri: "https://www.youtube.com/results?search_query=7080%EB%AC%B4%EB%A3%8C%EB%93%A3%EA%B8%B0",
@@ -63,5 +79,6 @@ export default function Youtube({ url }) {
             injectedJavaScript={INJECTED_JAVASCRIPT}
             onMessage={(event) => { }}
         />
+        </view>
     )
 };

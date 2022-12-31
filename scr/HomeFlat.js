@@ -241,7 +241,6 @@ const styles = StyleSheet.create({
         flex: 2,
         flexDirection: "column",
         marginLeft: 10,
-
     },
     cardTitle: {
         fontSize: 20,

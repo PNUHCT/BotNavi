@@ -13,6 +13,15 @@
     "production": {}
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "../path/to/cryptic-hawk-369202-ead9afeeedc1.json",
+        "track": "internal"
+      },
+      "ios": {
+        "appleId": "nyong9221@naver.com",
+        "ascAppId": "qldus0201!A"
+      }
+    }
   }
 }
